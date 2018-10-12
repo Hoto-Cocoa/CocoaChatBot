@@ -31,9 +31,9 @@ telegramBot.on('message', (msg) => {
 			var toSendMsg = "";
 			for(var i = 0; i < res.links.length; i++) {
 				var link = res.links[i];
-				toSendMsg += `[${link.title}](${link.href})\n${link.description}\n\n`;
+				toSendMsg += `<a href="${link.href}">${link.title}</a>\n${link.description}\n\n`
 			}
-			telegramBot.sendMessage(msg.chat.id, toSendMsg, { parse_mode: 'Markdown' });
+			telegramBot.sendMessage(msg.chat.id, toSendMsg, { parse_mode: 'HTML' });
 		})
 	}
 });
