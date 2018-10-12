@@ -1,0 +1,24 @@
+{
+  "name": "cocoachatbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0;"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hoto-Cocoa/CocoaChatBot.git"
+  },
+  "author": "Hoto Cocoa <cocoa@hoto.us>",
+  "license": "SEE LICENSE IN <LICENSE>",
+  "bugs": {
+    "url": "https://github.com/Hoto-Cocoa/CocoaChatBot/issues"
+  },
+  "homepage": "https://github.com/Hoto-Cocoa/CocoaChatBot#readme",
+  "dependencies": {
+    "google": "^2.1.0",
+    "node-telegram-bot-api": "^0.30.0",
+    "winston": "^3.1.0"
+  }
+}
