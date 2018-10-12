@@ -4,7 +4,7 @@ const Logger = require('winston');
 const Config = require('./config');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
-google.resultsPerPage = 3;
+google.resultsPerPage = 15;
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
 		Logger.format.splat(),
@@ -28,12 +28,14 @@ telegramBot.on('message', (msg) => {
 		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msg.text.substring(2, msg.text.length), msg.chat.title, msg.chat.id)
 		google(msg.text.substring(2, msg.text.length), function(err, res) {
 			if(err) logger.log('error', err);
-			var toSendMsg = "";
+			var toSendMsgs = [];
 			for(var i = 0; i < res.links.length; i++) {
+				if(toSendMsgs.length >= 3) break;
 				var link = res.links[i];
-				toSendMsg += `<a href="${link.href}">${link.title}</a>\n${link.description}\n\n`
+				// Change below description to href to show webpage results, that like youtube.
+				if(link.description) toSendMsgs.push(`<a href="${link.href}">${link.title}</a>\n${link.description}`);
 			}
-			telegramBot.sendMessage(msg.chat.id, toSendMsg, { parse_mode: 'HTML' });
+			telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 		})
 	}
 });
