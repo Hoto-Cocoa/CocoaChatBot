@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const google = require('google');
 const Logger = require('winston');
 const Config = require('./config');
+const Sauce = require('sagiri');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
 google.resultsPerPage = 15;
@@ -21,12 +22,16 @@ const logger = Logger.createLogger({
 		})
 	]
 });
+const sauce = new Sauce(Config.SauceNAO.Token);
+
+const tmpDir = require('os').tmpdir();
 
 telegramBot.on('message', (msg) => {
-	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msg.text, msg.chat.title, msg.chat.id);
-	if(msg.text.startsWith('//')) {
-		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msg.text.substring(2, msg.text.length), msg.chat.title, msg.chat.id)
-		google(msg.text.substring(2, msg.text.length), function(err, res) {
+	msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
+	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
+	if(msgText.startsWith('//')) {
+		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(2, msgText.length), msg.chat.title, msg.chat.id)
+		google(msgText.substring(2, msgText.length), function(err, res) {
 			if(err) logger.log('error', err);
 			var toSendMsgs = [];
 			for(var i = 0; i < res.links.length; i++) {
@@ -38,4 +43,26 @@ telegramBot.on('message', (msg) => {
 			telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 		})
 	}
+
+	if(msgText.toLowerCase() === 'source') {
+		if(!msg.photo && !msg.reply_to_message.photo) {
+			telegramBot.sendMessage(msg.chat.id, 'No photo detected!', { reply_to_message_id: msg.message_id });
+			return;
+		}
+
+		const photoObj = msg.photo ? msg.photo : msg.reply_to_message.photo, photo = photoObj[photoObj.length - 1];
+		telegramBot.downloadFile(photo.file_id, tmpDir).then(filePath => {
+			sauce.getSauce(filePath).then(sauceInfo => {
+				var sauceData = sauceInfo[0], sauceUrl = sauceData.original.data.pawoo_id ? `${sauceData.url}/${sauceData.original.data.pawoo_id}` : sauceData.url;
+				var toSendMsgs = [];
+				toSendMsgs.push(`<a href="${sauceUrl}">View on ${sauceData.site}</a>`);
+				toSendMsgs.push(`Similarity: ${sauceData.similarity}`);
+				telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
+			});
+		});
+	}
+});
+
+telegramBot.on('polling_error', (e) => {
+	logger.log('error', e);
 });
