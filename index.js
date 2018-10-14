@@ -30,7 +30,7 @@ telegramBot.on('message', (msg) => {
 	msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 	if(msgText.startsWith('//')) {
-		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(2, msgText.length), msg.chat.title, msg.chat.id)
+		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(2, msgText.length), msg.chat.title, msg.chat.id);
 		google(msgText.substring(2, msgText.length), function(err, res) {
 			if(err) logger.log('error', err);
 			var toSendMsgs = [];
@@ -41,10 +41,11 @@ telegramBot.on('message', (msg) => {
 				if(link.description) toSendMsgs.push(`<a href="${link.href}">${link.title}</a>\n${link.description.replace('<', '&lt;').replace('>', '&gt;')}`);
 			}
 			telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
-		})
+		});
 	}
 
 	if(msgText.toLowerCase() === 'source') {
+		logger.log('notice', 'User %s Used Source Command in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msg.chat.title, msg.chat.id);
 		if(!msg.photo && !msg.reply_to_message.photo) {
 			telegramBot.sendMessage(msg.chat.id, 'No photo detected!', { reply_to_message_id: msg.message_id });
 			return;
