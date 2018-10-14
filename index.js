@@ -3,6 +3,7 @@ const google = require('google');
 const Logger = require('winston');
 const Config = require('./config');
 const Sauce = require('sagiri');
+const math = require('mathjs');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
 google.resultsPerPage = 15;
@@ -61,6 +62,11 @@ telegramBot.on('message', (msg) => {
 				telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 			});
 		});
+	}
+
+	if(msgText.startsWith('=')) {
+		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(1, msgText.length), msg.chat.title, msg.chat.id);
+		telegramBot.sendMessage(msg.chat.id, math.eval(msgText.substring(1, msgText.length)), { reply_to_message_id: msg.message_id });
 	}
 });
 
