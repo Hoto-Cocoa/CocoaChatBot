@@ -68,7 +68,7 @@ telegramBot.on('message', (msg) => {
 
 	if(msgText.startsWith('=')) {
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(1, msgText.length), msg.chat.title, msg.chat.id);
-		wolfram.query(math.parse(msgText.substring(1, msgText.length)).toTex(), (err, res) => {
+		wolfram.query(msgText.substring(1, msgText.length), (err, res) => {
 			if(err) logger.log('error', err);
 			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value;
 			if(value) value = value.subpods[0].value;
