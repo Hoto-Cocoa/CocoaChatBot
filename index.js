@@ -70,8 +70,9 @@ telegramBot.on('message', (msg) => {
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(1, msgText.length), msg.chat.title, msg.chat.id);
 		wolfram.query(math.parse(msgText.substring(1, msgText.length)).toTex(), (err, res) => {
 			if(err) logger.log('error', err);
-			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value.subpods[0].value;
-			if(value.startsWith('{')) value = value.substring(1, value.length - 1);
+			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value;
+			if(value) value = value.subpods[0].value;
+			if(value && value.startsWith('{')) value = value.substring(1, value.length - 1);
 			telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
 		});
 	}
