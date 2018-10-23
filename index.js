@@ -4,6 +4,8 @@ const Logger = require('winston');
 const Config = require('./config');
 const Sauce = require('sagiri');
 const math = require('mathjs');
+const wolfram = require('wolfram').createClient(Config.Wolfram.Token);
+const jsonQuery = require('json-query');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
 google.resultsPerPage = 15;
@@ -66,7 +68,12 @@ telegramBot.on('message', (msg) => {
 
 	if(msgText.startsWith('=')) {
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(1, msgText.length), msg.chat.title, msg.chat.id);
-		telegramBot.sendMessage(msg.chat.id, math.eval(msgText.substring(1, msgText.length)), { reply_to_message_id: msg.message_id });
+		wolfram.query(math.parse(msgText.substring(1, msgText.length)).toTex(), (err, res) => {
+			if(err) logger.log('error', err);
+			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value.subpods[0].value;
+			if(value.startsWith('{')) value = value.substring(1, value.length - 1);
+			telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
+		});
 	}
 });
 
