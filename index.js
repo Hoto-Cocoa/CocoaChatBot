@@ -67,7 +67,7 @@ telegramBot.on('message', (msg) => {
 	if(msgText.startsWith('=')) {
 		const input = msgText.substring(1, msgText.length);
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${input}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&podstate=9@Result__More+digits&podstate=9@DecimalApproximation__More+digits&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation`, res => {
+		https.get(`https://api.wolframalpha.com/v2/query?input=${input}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&podstate=9@Result__More+digits&podstate=9@DecimalApproximation__More+digits&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
 			var json = '';
 			res.on('data', data => {
 				json += data;
