@@ -74,7 +74,7 @@ telegramBot.on('message', (msg) => {
 			});
 			res.on('end', () => {
 				json = JSON.parse(json);
-				var value = json.queryresult.pods ? json.queryresult.pods[0].subpods[0].plaintext : input;
+				var value = json.queryresult.pods ? json.queryresult.pods[0].subpods[0].plaintext : "Wrong input!";
 				telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
 			});
 		});
