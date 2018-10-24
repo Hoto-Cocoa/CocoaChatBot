@@ -3,7 +3,6 @@ const google = require('google');
 const Logger = require('winston');
 const Config = require('./config');
 const Sauce = require('sagiri');
-const math = require('mathjs');
 const wolfram = require('wolfram').createClient(Config.Wolfram.Token);
 const jsonQuery = require('json-query');
 
@@ -71,6 +70,7 @@ telegramBot.on('message', (msg) => {
 		wolfram.query(msgText.substring(1, msgText.length), (err, res) => {
 			if(err) logger.log('error', err);
 			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value;
+			console.log(value);
 			if(value) value = value.subpods[0].value;
 			if(value && value.startsWith('{')) value = value.substring(1, value.length - 1);
 			telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
