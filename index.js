@@ -3,8 +3,7 @@ const google = require('google');
 const Logger = require('winston');
 const Config = require('./config');
 const Sauce = require('sagiri');
-const wolfram = require('wolfram').createClient(Config.Wolfram.Token);
-const jsonQuery = require('json-query');
+const https = require('https');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
 google.resultsPerPage = 15;
@@ -66,14 +65,18 @@ telegramBot.on('message', (msg) => {
 	}
 
 	if(msgText.startsWith('=')) {
-		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(1, msgText.length), msg.chat.title, msg.chat.id);
-		wolfram.query(msgText.substring(1, msgText.length), (err, res) => {
-			if(err) logger.log('error', err);
-			var value = jsonQuery('data[primary=true]', { data: { data: res } }).value;
-			console.log(value);
-			if(value) value = value.subpods[0].value;
-			if(value && value.startsWith('{')) value = value.substring(1, value.length - 1);
-			telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
+		const input = msgText.substring(1, msgText.length);
+		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
+		https.get(`https://api.wolframalpha.com/v2/query?input=${input}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&podstate=9@Result__More+digits&output=json&podtitle=Result&podtitle=Power%20of%2010%20representation`, res => {
+			var json = '';
+			res.on('data', data => {
+				json += data;
+			});
+			res.on('end', () => {
+				json = JSON.parse(json);
+				var value = json.queryresult.pods ? json.queryresult.pods[0].subpods[0].plaintext : input;
+				telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
+			});
 		});
 	}
 });
