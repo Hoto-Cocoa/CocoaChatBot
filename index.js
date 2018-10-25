@@ -80,7 +80,7 @@ telegramBot.on('message', (msg) => {
 				if(json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
 					reply_markup: { inline_keyboard: [ [ {
 						text: 'More', 
-						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1, expression: input })
+						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1 })
 					} ] ] }
 				}, options);
 				telegramBot.sendMessage(msg.chat.id, value, options);
@@ -97,7 +97,7 @@ telegramBot.on('callback_query', msg => {
 	const data = JSON.parse(msg.data);
 	if(data.action === 'MathMoreNumber') {
 		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `@${msg.message.from.username}(${msg.message.from.id})`, data.expression, data.value, msg.message.chat.title , msg.message.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(data.expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
+		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(msg.message.reply_to_message.text)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
 			var json = '';
 			res.on('data', data => {
 				json += data;
@@ -109,7 +109,7 @@ telegramBot.on('callback_query', msg => {
 				if(data.value < 10 && json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
 					reply_markup: { inline_keyboard: [ [ {
 						text: 'More', 
-						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1, expression: data.expression })
+						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
 					} ] ] }
 				}, options);
 				telegramBot.editMessageText(value, options);
