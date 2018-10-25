@@ -81,7 +81,7 @@ telegramBot.on('message', (msg) => {
 	}
 
 	if(msgText.toLowerCase() === 'info') {
-		telegramBot.sendMessage(msg.chat.id, JSON.stringify(msg.reply_to_message), { reply_to_message_id: msg.message_id });
+		telegramBot.sendMessage(msg.chat.id, JSON.stringify(msg.reply_to_message ? msg.reply_to_message : msg), { reply_to_message_id: msg.message_id });
 	}
 });
 
