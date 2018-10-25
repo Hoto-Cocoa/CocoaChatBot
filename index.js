@@ -67,21 +67,54 @@ telegramBot.on('message', (msg) => {
 	if(msgText.startsWith('=')) {
 		const input = msgText.substring(1, msgText.length);
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&podstate=9@Result__More+digits&podstate=9@DecimalApproximation__More+digits&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
+		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
 			var json = '';
 			res.on('data', data => {
 				json += data;
 			});
 			res.on('end', () => {
 				json = JSON.parse(json);
-				var value = json.queryresult.pods ? json.queryresult.pods[0].subpods[0].plaintext : "Wrong input!";
-				telegramBot.sendMessage(msg.chat.id, value, { reply_to_message_id: msg.message_id });
+				if(!json.queryresult.pods) return telegramBot.sendMessage(msg.chat.id, 'Wrong input!', { reply_to_message_id: msg.message_id });
+				const value = json.queryresult.pods[0].subpods[0].plaintext;
+				var options = { reply_to_message_id: msg.message_id };
+				if(json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
+					reply_markup: { inline_keyboard: [ [ {
+						text: 'More', 
+						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1, expression: input })
+					} ] ] }
+				}, options);
+				telegramBot.sendMessage(msg.chat.id, value, options);
 			});
 		});
 	}
 
 	if(msgText.toLowerCase() === 'info') {
 		telegramBot.sendMessage(msg.chat.id, JSON.stringify(msg.reply_to_message ? msg.reply_to_message : msg), { reply_to_message_id: msg.message_id });
+	}
+});
+
+telegramBot.on('callback_query', msg => {
+	const data = JSON.parse(msg.data);
+	if(data.action === 'MathMoreNumber') {
+		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `@${msg.message.from.username}(${msg.message.from.id})`, data.expression, data.value, msg.message.chat.title , msg.message.chat.id);
+		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(data.expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
+			var json = '';
+			res.on('data', data => {
+				json += data;
+			});
+			res.on('end', () => {
+				json = JSON.parse(json);
+				const value = json.queryresult.pods[0].subpods[0].plaintext;
+				var options = { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id };
+				if(data.value < 10 && json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
+					reply_markup: { inline_keyboard: [ [ {
+						text: 'More', 
+						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1, expression: data.expression })
+					} ] ] }
+				}, options);
+				telegramBot.editMessageText(value, options);
+			});
+		});
 	}
 });
 
