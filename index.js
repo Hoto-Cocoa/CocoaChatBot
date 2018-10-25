@@ -96,8 +96,9 @@ telegramBot.on('message', (msg) => {
 telegramBot.on('callback_query', msg => {
 	const data = JSON.parse(msg.data);
 	if(data.action === 'MathMoreNumber') {
-		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `@${msg.message.from.username}(${msg.message.from.id})`, data.expression, data.value, msg.message.chat.title , msg.message.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(msg.message.reply_to_message.text)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
+		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
+		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `@${msg.message.from.username}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title , msg.message.chat.id);
+		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
 			var json = '';
 			res.on('data', data => {
 				json += data;
