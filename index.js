@@ -6,14 +6,13 @@ const Sauce = require('sagiri');
 const https = require('https');
 const math = require('mathjs');
 
-const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
-google.resultsPerPage = 20;
+
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
 		Logger.format.splat(),
 		Logger.format.simple(),
 		Logger.format.timestamp(),
-		Logger.format.printf((info) => { return `[${info.timestamp}] [${info.level}] ${info.message}`; })
+		Logger.format.printf(info => { return `[${info.timestamp}] [${info.level}] ${info.message}`; })
 	),
 	levels: Logger.config.syslog.levels,
 	transports: [
@@ -24,7 +23,10 @@ const logger = Logger.createLogger({
 		})
 	]
 });
+const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true });
 const sauce = new Sauce(Config.SauceNAO.Token);
+
+google.resultsPerPage = 20;
 math.config({
 	number: 'BigNumber',
 	precision: 64
@@ -32,8 +34,8 @@ math.config({
 
 const tmpDir = require('os').tmpdir();
 
-telegramBot.on('message', (msg) => {
-	msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
+telegramBot.on('message', msg => {
+	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 	if(msgText.startsWith('//')) {
 		logger.log('notice', 'User %s Used Google Command(Search %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText.substring(2, msgText.length), msg.chat.title, msg.chat.id);
@@ -59,8 +61,7 @@ telegramBot.on('message', (msg) => {
 		const photoObj = msg.photo ? msg.photo : msg.reply_to_message.photo, photo = photoObj[photoObj.length - 1];
 		telegramBot.downloadFile(photo.file_id, tmpDir).then(filePath => {
 			sauce.getSauce(filePath).then(sauceInfo => {
-				var sauceData = sauceInfo[0], sauceUrl = sauceData.original.data.pawoo_id ? `${sauceData.url}/${sauceData.original.data.pawoo_id}` : sauceData.url;
-				var toSendMsgs = [];
+				var sauceData = sauceInfo[0], sauceUrl = sauceData.original.data.pawoo_id ? `${sauceData.url}/${sauceData.original.data.pawoo_id}` : sauceData.url, toSendMsgs = [];
 				toSendMsgs.push(`<a href="${sauceUrl}">View on ${sauceData.site}</a>`);
 				toSendMsgs.push(`Similarity: ${sauceData.similarity}`);
 				return telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
