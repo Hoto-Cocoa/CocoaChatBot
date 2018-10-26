@@ -76,7 +76,7 @@ telegramBot.on('message', msg => {
 			if(input.toLowerCase().search(Config.BannedWords[i]) !== -1) return telegramBot.sendMessage(msg.chat.id, 'This expression was banned.', { reply_to_message_id: msg.message_id }); 
 		}
 		try {
-			if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1) {
+			if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1 && input !== 'pi') {
 				return telegramBot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
 			} else {
 				throw new Error();
