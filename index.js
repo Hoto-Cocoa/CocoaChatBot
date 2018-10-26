@@ -7,7 +7,7 @@ const https = require('https');
 const math = require('mathjs');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
-google.resultsPerPage = 15;
+google.resultsPerPage = 20;
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
 		Logger.format.splat(),
