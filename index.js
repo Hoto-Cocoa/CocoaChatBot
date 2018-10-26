@@ -46,15 +46,14 @@ telegramBot.on('message', (msg) => {
 				// Change below description to href to show webpage results, that like youtube.
 				if(link.description) toSendMsgs.push(`<a href="${link.href}">${link.title}</a>\n${link.description.replace('<', '&lt;').replace('>', '&gt;')}`);
 			}
-			telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
+			return telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 		});
 	}
 
 	if(msgText.toLowerCase() === 'source') {
 		logger.log('notice', 'User %s Used Source Command in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msg.chat.title, msg.chat.id);
 		if(!msg.photo && !msg.reply_to_message.photo) {
-			telegramBot.sendMessage(msg.chat.id, 'No photo detected!', { reply_to_message_id: msg.message_id });
-			return;
+			return telegramBot.sendMessage(msg.chat.id, 'No photo detected!', { reply_to_message_id: msg.message_id });
 		}
 
 		const photoObj = msg.photo ? msg.photo : msg.reply_to_message.photo, photo = photoObj[photoObj.length - 1];
@@ -64,7 +63,7 @@ telegramBot.on('message', (msg) => {
 				var toSendMsgs = [];
 				toSendMsgs.push(`<a href="${sauceUrl}">View on ${sauceData.site}</a>`);
 				toSendMsgs.push(`Similarity: ${sauceData.similarity}`);
-				telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
+				return telegramBot.sendMessage(msg.chat.id, toSendMsgs.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 			});
 		});
 	}
@@ -77,7 +76,7 @@ telegramBot.on('message', (msg) => {
 		}
 		try {
 			if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1) {
-				telegramBot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
+				return telegramBot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
 			} else {
 				throw new Error();
 			}
@@ -98,14 +97,14 @@ telegramBot.on('message', (msg) => {
 							callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1 })
 						} ] ] }
 					}, options);
-					telegramBot.sendMessage(msg.chat.id, value, options);
+					return telegramBot.sendMessage(msg.chat.id, value, options);
 				});
 			});
 		}
 	}
 
 	if(msgText.toLowerCase() === 'info') {
-		telegramBot.sendMessage(msg.chat.id, JSON.stringify(msg.reply_to_message ? msg.reply_to_message : msg), { reply_to_message_id: msg.message_id });
+		return telegramBot.sendMessage(msg.chat.id, JSON.stringify(msg.reply_to_message ? msg.reply_to_message : msg), { reply_to_message_id: msg.message_id });
 	}
 });
 
@@ -129,7 +128,7 @@ telegramBot.on('callback_query', msg => {
 						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
 					} ] ] }
 				}, options);
-				telegramBot.editMessageText(value, options);
+				return telegramBot.editMessageText(value, options);
 			});
 		});
 	}
