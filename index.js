@@ -4,6 +4,7 @@ const Logger = require('winston');
 const Config = require('./config');
 const Sauce = require('sagiri');
 const https = require('https');
+const math = require('mathjs');
 
 const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true} );
 google.resultsPerPage = 15;
@@ -24,6 +25,10 @@ const logger = Logger.createLogger({
 	]
 });
 const sauce = new Sauce(Config.SauceNAO.Token);
+math.config({
+	number: 'BigNumber',
+	precision: 64
+});
 
 const tmpDir = require('os').tmpdir();
 
@@ -67,25 +72,34 @@ telegramBot.on('message', (msg) => {
 	if(msgText.startsWith('=')) {
 		const input = msgText.substring(1, msgText.length);
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
-			var json = '';
-			res.on('data', data => {
-				json += data;
+		if(Config.BannedWords.contains(input.toLowerCase())) return telegramBot.sendMessage(msg.chat.id, 'This expression was banned.', { reply_to_message_id: msg.message_id });
+		try {
+			if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1) {
+				telegramBot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
+			} else {
+				throw new Error();
+			}
+		} catch(e) {
+			https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${Config.Wolfram.Token}&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
+				var json = '';
+				res.on('data', data => {
+					json += data;
+				});
+				res.on('end', () => {
+					json = JSON.parse(json);
+					if(!json.queryresult.pods) return telegramBot.sendMessage(msg.chat.id, 'Wrong input!', { reply_to_message_id: msg.message_id });
+					const value = json.queryresult.pods[0].subpods[0].plaintext;
+					var options = { reply_to_message_id: msg.message_id };
+					if(json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
+						reply_markup: { inline_keyboard: [ [ {
+							text: 'More', 
+							callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1 })
+						} ] ] }
+					}, options);
+					telegramBot.sendMessage(msg.chat.id, value, options);
+				});
 			});
-			res.on('end', () => {
-				json = JSON.parse(json);
-				if(!json.queryresult.pods) return telegramBot.sendMessage(msg.chat.id, 'Wrong input!', { reply_to_message_id: msg.message_id });
-				const value = json.queryresult.pods[0].subpods[0].plaintext;
-				var options = { reply_to_message_id: msg.message_id };
-				if(json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
-					reply_markup: { inline_keyboard: [ [ {
-						text: 'More', 
-						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: 1 })
-					} ] ] }
-				}, options);
-				telegramBot.sendMessage(msg.chat.id, value, options);
-			});
-		});
+		}
 	}
 
 	if(msgText.toLowerCase() === 'info') {
@@ -109,7 +123,7 @@ telegramBot.on('callback_query', msg => {
 				var options = { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id };
 				if(data.value < 10 && json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
 					reply_markup: { inline_keyboard: [ [ {
-						text: 'More', 
+						text: 'More',
 						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
 					} ] ] }
 				}, options);
