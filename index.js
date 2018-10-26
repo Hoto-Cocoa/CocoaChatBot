@@ -72,7 +72,9 @@ telegramBot.on('message', (msg) => {
 	if(msgText.startsWith('=')) {
 		const input = msgText.substring(1, msgText.length);
 		logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `@${msg.from.username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
-		if(Config.BannedWords.contains(input.toLowerCase())) return telegramBot.sendMessage(msg.chat.id, 'This expression was banned.', { reply_to_message_id: msg.message_id });
+		for(var i = 0; i < Config.BannedWords.length; i++) {
+			if(input.toLowerCase().search(Config.BannedWords[i]) !== -1) return telegramBot.sendMessage(msg.chat.id, 'This expression was banned.', { reply_to_message_id: msg.message_id }); 
+		}
 		try {
 			if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1) {
 				telegramBot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
