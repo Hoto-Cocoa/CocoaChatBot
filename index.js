@@ -133,7 +133,7 @@ telegramBot.on('message', msg => {
 			const id = msgArr.shift();
 			logger.log('notice', 'User %s Used Vote Command(View %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 			database.query('SELECT * FROM vote WHERE id=?;', id).then(res => {
-				if(!res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
+				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				const data = JSON.parse(res[0].data);
 				var inlineBtnArr = [];
 				for(var i = 0; i < data.selections.length; i++) {
@@ -155,7 +155,7 @@ telegramBot.on('message', msg => {
 			logger.log('notice', 'User %s Used Vote Command(Open %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 			database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id).then(res => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
-				if(!res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
+				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				if(res[0].closed === 0) return telegramBot.sendMessage(msg.chat.id, 'This vote not closed.', { reply_to_message_id: msg.message_id });
 				database.query('UPDATE vote SET closed=1 WHERE id=?;', id).then(() => {
 					return telegramBot.sendMessage(msg.chat.id, `Vote ${res[0].name}(#${id}) opened.`, { reply_to_message_id: msg.message_id });
@@ -168,7 +168,7 @@ telegramBot.on('message', msg => {
 			logger.log('notice', 'User %s Used Vote Command(Close %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 			database.query('SELECT groupId, name, closed, delete FROM vote WHERE id=?;', id).then(res => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
-				if(!res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
+				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				if(res[0].closed === 1) return telegramBot.sendMessage(msg.chat.id, 'This vote already closed.', { reply_to_message_id: msg.message_id });
 				database.query('UPDATE vote SET closed=1 WHERE id=?;', id).then(() => {
 					return telegramBot.sendMessage(msg.chat.id, `Vote ${res[0].name}(#${id}) closed.`, { reply_to_message_id: msg.message_id });
@@ -181,7 +181,7 @@ telegramBot.on('message', msg => {
 			logger.log('notice', 'User %s Used Vote Command(Result %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 			database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id).then(res => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
-				if(!res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
+				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				var data = JSON.parse(res[0].data);
 				var name = res[0].name;
 				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id).then(res => {
@@ -200,7 +200,7 @@ telegramBot.on('message', msg => {
 			logger.log('notice', 'User %s Used Vote Command(AResult %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 			database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id).then(res => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
-				if(!res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
+				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				var data = JSON.parse(res[0].data);
 				var name = res[0].name;
 				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id).then(res => {
