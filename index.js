@@ -166,7 +166,7 @@ telegramBot.on('message', msg => {
 		if(action === 'close') {
 			const id = msgArr.shift();
 			logger.log('notice', 'User %s Used Vote Command(Close %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-			database.query('SELECT groupId, name, closed, delete FROM vote WHERE id=?;', id).then(res => {
+			database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id).then(res => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
 				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				if(res[0].closed === 1) return telegramBot.sendMessage(msg.chat.id, 'This vote already closed.', { reply_to_message_id: msg.message_id });
