@@ -157,7 +157,7 @@ telegramBot.on('message', msg => {
 				if(parseInt(res[0].groupId) !== msg.chat.id) return telegramBot.sendMessage(msg.chat.id, 'This vote not created in this chat. Please execute this command in chat that this vote created.', { reply_to_message_id: msg.message_id });
 				if(res[0].deleted) return telegramBot.sendMessage(msg.chat.id, 'This vote was deleted.', { reply_to_message_id: msg.message_id });
 				if(res[0].closed === 0) return telegramBot.sendMessage(msg.chat.id, 'This vote not closed.', { reply_to_message_id: msg.message_id });
-				database.query('UPDATE vote SET closed=1 WHERE id=?;', id).then(() => {
+				database.query('UPDATE vote SET closed=0 WHERE id=?;', id).then(() => {
 					return telegramBot.sendMessage(msg.chat.id, `Vote ${res[0].name}(#${id}) opened.`, { reply_to_message_id: msg.message_id });
 				});
 			});
