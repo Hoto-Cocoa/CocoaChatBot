@@ -115,7 +115,8 @@ telegramBot.on('message', msg => {
 		var msgArr = msgText.substring(5, msgText.length).split(' ');
 		const action = msgArr.shift().toLowerCase();
 		var username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		msgArr = msgArr.join('').split(',');
+		msgArr = msgArr.join(' ').split(',');
+		for(var i = 0; i < msgArr.length; i++) msgArr[i] = msgArr[i].trim();
 
 		if(action === 'create') {
 			logger.log('notice', 'User %s Used Vote Command(Create %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr.join(', '), msg.chat.title, msg.chat.id);
