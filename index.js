@@ -37,6 +37,9 @@ require('./modules/CreateDatabase')(Config.Database, logger);
 
 const tmpDir = require('os').tmpdir();
 
+const rateLimit = [];
+rateLimit['BtnVoteVoting'] = [];
+
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
@@ -259,7 +262,15 @@ telegramBot.on('callback_query', msg => {
 	}
 
 	if(data.action === 'VoteVoting') {
-		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `@${name}(${msg.message.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
+		if(rateLimit['BtnVoteVoting'][msg.from.id]) return telegramBot.answerCallbackQuery(msg.id, {
+			text: 'You are rate-limited.'
+		});
+		rateLimit['BtnVoteVoting'][msg.from.id] = true;
+		setTimeout(() => {
+			rateLimit['BtnVoteVoting'][msg.from.id] = null;
+			delete rateLimit['BtnVoteVoting'][msg.from.id];
+		}, 5000);
+		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `@${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
 		database.query('SELECT closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
 			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
 				text: 'This vote was closed.'
