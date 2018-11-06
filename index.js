@@ -260,9 +260,12 @@ telegramBot.on('callback_query', msg => {
 
 	if(data.action === 'VoteVoting') {
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `@${name}(${msg.message.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
-		database.query('SELECT closed FROM vote WHERE id=?', data.vote).then(res => {
+		database.query('SELECT closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
 			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
 				text: 'This vote was closed.'
+			});
+			if(res[0].deleted) return telegramBot.answerCallbackQuery(msg.id, {
+				text: 'This vote was deleted.'
 			});
 			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [
 				data.vote, msg.from.id
