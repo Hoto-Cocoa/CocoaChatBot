@@ -209,7 +209,7 @@ telegramBot.on('message', msg => {
 					var selections = [];
 					for(var i = 0; i < data.selections.length; i++) {
 						var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res }}).value;
-						selections.push(`<b>${data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(' ,')})` : ''}`);
+						selections.push(`<b>${data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
 					}
 					return telegramBot.sendMessage(msg.chat.id, `<b>${name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 				});
