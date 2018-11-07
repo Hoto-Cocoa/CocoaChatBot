@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Hoto-Cocoa/CocoaChatBot#readme",
   "dependencies": {
+    "calcium": "^0.5.3",
     "google": "^2.1.0",
     "json-query": "^2.2.2",
     "mathjs": "^5.2.2",
