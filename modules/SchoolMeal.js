@@ -23,7 +23,7 @@ module.exports = (type, location, name, callback) => {
 		return schoolApi.get(res[0].code, (err, res) => {
 			if(err) return callback(err, null);
 			if(!res || !res[(new Date().getDate())] || !res[(new Date().getDate())][type]) return callback(null, 'No data!');
-			return callback(null, res[(new Date().getDate())][type].join('/'));
+			return callback(null, res[(new Date().getDate())][type].join('/').replace('&amp;', '&'));
 		});
 	});
 }
