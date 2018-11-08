@@ -3,6 +3,7 @@ const Logger = require('winston');
 const Config = require('./config');
 const https = require('https');
 const Database = require('./modules/Database');
+const schoolMeal = require('./modules/SchoolMeal');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -93,6 +94,14 @@ telegramBot.on('callback_query', msg => {
 					});
 				});
 			});
+		});
+	}
+
+	if(data.action === 'SchoolChoice') {
+		logger.log('notice', 'User %s Used School Choice Button(School %s, Type %s) in %s(%s)', `${name}(${msg.message.from.id})`, data.code, data.type, msg.message.chat.title , msg.message.chat.id);
+		schoolMeal.get(data.type, data.code, (err, res) => {
+			if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));
+			return telegramBot.editMessageText(res, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id });
 		});
 	}
 });
