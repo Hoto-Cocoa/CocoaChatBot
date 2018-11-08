@@ -11,7 +11,7 @@ module.exports.find = (location, name, callback) => {
 }
 
 module.exports.get = (type, code, callback) => {
-	if(/^[ALOU-Z][0-9]{9}$/.test(res[0].code)) return callback(null, `Not supported school! (Type: ${res[0].code.substring(0, 1)})`);
+	if(/^[ALOU-Z][0-9]{9}$/.test(code)) return callback(null, `Not supported school! (Type: ${code.substring(0, 1)})`);
 	if(code === 'J100000855') {
 		return https.get(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`, res => {
 			var json = '';
