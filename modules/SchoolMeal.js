@@ -6,12 +6,12 @@ module.exports.find = (location, name, callback) => {
 	return schoolApi.find(location, name, (err, res) => {
 		if(err) return callback(err, null, null);
 		if(res.length === 0) return callback(null, 'No such school!', []);
-		// if(/^[ALOU-Z][0-9]{9}$/.test(res[0].code)) return callback(null, `Not supported school! (Type: ${res[0].code.substring(0, 1)})`);
 		return callback(null, null, res);
 	});
 }
 
 module.exports.get = (type, code, callback) => {
+	if(/^[ALOU-Z][0-9]{9}$/.test(res[0].code)) return callback(null, `Not supported school! (Type: ${res[0].code.substring(0, 1)})`);
 	if(code === 'J100000855') {
 		return https.get(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`, res => {
 			var json = '';
