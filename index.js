@@ -236,6 +236,7 @@ telegramBot.on('message', msg => {
 
 	if(msgText.startsWith('school ')) {
 		const msgArr = msgText.substring(7, msgText.length).split(' ');
+		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 		logger.log('notice', 'User %s Used School Command(Get %s of %s %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr[0], msgArr[1], msgArr[2], msg.chat.title, msg.chat.id);
 		schoolMeal(msgArr[0], msgArr[1], msgArr[2], (err, res) => {
 			if(err) return (logger.log('error', err) && telegramBot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));
