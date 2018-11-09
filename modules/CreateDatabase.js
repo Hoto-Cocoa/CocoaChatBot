@@ -13,7 +13,7 @@ module.exports = (config, logger) => {
 	});
 	const queryInterface = sequelize.getQueryInterface();
 
-	queryInterface.createTable( 'vote', {
+	queryInterface.createTable('vote', {
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
@@ -60,7 +60,7 @@ module.exports = (config, logger) => {
 		}
 	});
 	
-	queryInterface.createTable( 'voting', {
+	queryInterface.createTable('voting', {
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
