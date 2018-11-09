@@ -25,9 +25,9 @@ module.exports = (bot, logger) => {
 					}
 					return bot.sendMessage(msg.chat.id, (res.length > 10) ? `Choice your school.\n${res.length} schools were searched and only 10 schools were sent. Please specify your school name more.` : 'Choice your school.', { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				}
-				schoolMeal.get(msgArr[0], res[0].code, (err, res) => {
+				schoolMeal.get(msgArr[0], res[0].code, (err, resu) => {
 					if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));
-					return bot.sendMessage(msg.chat.id, res, { reply_to_message_id: msg.message_id });
+					return bot.sendMessage(msg.chat.id, `<b>${res[0].name}</b>: ${resu}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 				});
 			});
 		}
