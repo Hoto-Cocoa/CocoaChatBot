@@ -13,7 +13,7 @@ module.exports = (bot, logger) => {
 				if(emsg) return bot.sendMessage(msg.chat.id, emsg, { reply_to_message_id: msg.message_id });
 				if(res.length > 1) {
 					var inlineBtnArr = [];
-					for(var i = 0; i < res.length; i++) {
+					for(var i = 0; i < res.length && i < 10; i++) {
 						inlineBtnArr.push([{
 							text: res[i].name,
 							callback_data: JSON.stringify({
@@ -23,7 +23,7 @@ module.exports = (bot, logger) => {
 							})
 						}]);
 					}
-					return bot.sendMessage(msg.chat.id, 'Choice your school.', { reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+					return bot.sendMessage(msg.chat.id, (res.length > 10) ? `Choice your school.\n${res.length} schools were searched and only 10 schools were sent. Please specify your school name more.` : 'Choice your school.', { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				}
 				schoolMeal.get(msgArr[0], res[0].code, (err, res) => {
 					if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));

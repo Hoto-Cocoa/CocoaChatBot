@@ -6,7 +6,11 @@ module.exports.find = (location, name, callback) => {
 	return schoolApi.find(location, name, (err, res) => {
 		if(err) return callback(err, null, null);
 		if(res.length === 0) return callback(null, 'No such school!', []);
-		return callback(null, null, res);
+		var ret = [];
+		for(var i = 0; i < res.length; i++) {
+			if(res[i].name.search('유치원') === -1) ret.push(res[i]);
+		}
+		return callback(null, null, ret);
 	});
 }
 
