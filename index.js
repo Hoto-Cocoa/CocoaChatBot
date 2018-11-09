@@ -31,7 +31,8 @@ rateLimit['BtnVoteVoting'] = [];
 
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
-	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${msg.from.username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
+	const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
+	logger.log('debug', 'User %s Said "%s" in %s(%s)', `@${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 });
 require('./commands/index')(telegramBot, logger, database);
 
