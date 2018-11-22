@@ -5,6 +5,7 @@ const msgObj = {
 	'vote [create name, selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]': 'Vote Command',
 	'info': 'Get messsge info',
 	'school [breakfast|lunch|dinner|snack] City SchoolName': 'Get school food menu',
+	'get id': 'Get message of id',
 	'help': 'Display this message',
 	'Support Chat (ko-KR)': '@CocoaCafe'
 };
