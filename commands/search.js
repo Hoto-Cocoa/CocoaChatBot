@@ -7,8 +7,8 @@ module.exports = (bot, logger) => {
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 		if(msgText.startsWith('//')) {
-			logger.log('notice', 'User %s Used Search Command(Search %s) in %s(%s)', `${username}(${msg.from.id})`, msgText.substring(2, msgText.length), msg.chat.title, msg.chat.id);
-			google(msgText.substring(2, msgText.length), function(err, res) {
+			logger.log('notice', 'User %s Used Search Command(Search %s) in %s(%s)', `${username}(${msg.from.id})`, msgText.substring(2), msg.chat.title, msg.chat.id);
+			google(msgText.substring(2), function(err, res) {
 				if(err) logger.log('error', err);
 				var toSendMsgs = [];
 				for(var i = 0; i < res.links.length; i++) {

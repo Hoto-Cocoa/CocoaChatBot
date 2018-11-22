@@ -6,7 +6,7 @@ module.exports = (bot, logger) => {
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 		if(msgText.startsWith('school ')) {
-			const msgArr = msgText.substring(7, msgText.length).split(' ');
+			const msgArr = msgText.substring(7).split(' ');
 			logger.log('notice', 'User %s Used School Command(Get %s of %s %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr[0], msgArr[1], msgArr[2], msg.chat.title, msg.chat.id);
 			schoolMeal.find(msgArr[1], msgArr[2], (err, emsg, res) => {
 				if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));

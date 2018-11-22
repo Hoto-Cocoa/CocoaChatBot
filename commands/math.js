@@ -11,7 +11,7 @@ module.exports = (bot, logger) => {
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 		if(msgText.startsWith('=')) {
-			const input = msgText.substring(1, msgText.length);
+			const input = msgText.substring(1);
 			if(input.match(/[ㄱ-힣]/)) return;
 			logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `${username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
 			for(var i = 0; i < require('../config').BannedWords.length; i++) {

@@ -7,7 +7,7 @@ module.exports = (bot, logger, database) => {
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 		if(msgText.toLowerCase().startsWith('vote ')) {
-			var msgArr = msgText.substring(5, msgText.length).split(' ');
+			var msgArr = msgText.substring(5).split(' ');
 			const action = msgArr.shift().toLowerCase();
 			msgArr = msgArr.join(' ').split(',');
 			for(var i = 0; i < msgArr.length; i++) msgArr[i] = msgArr[i].trim();
