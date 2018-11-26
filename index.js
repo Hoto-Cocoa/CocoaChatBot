@@ -149,5 +149,5 @@ telegramBot.on('polling_error', (e) => {
 });
 
 process.on('unhandledRejection', (reason, p) => {
-	logger.log('error', reason);
+	logger.log('error', reason.stack);
   });
