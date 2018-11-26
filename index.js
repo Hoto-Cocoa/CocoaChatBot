@@ -4,6 +4,7 @@ const Config = require('./config');
 const https = require('https');
 const Database = require('./modules/Database');
 const schoolMeal = require('./modules/SchoolMeal');
+const jsonQuery = require('json-query');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -31,12 +32,17 @@ const rateLimits = ['BtnVoteVoting', 'BtnMathMoreNumber'];
 for(var i = 0; i < rateLimits.length; i++) {
 	rateLimit[rateLimits[i]] = [];
 }
-function doRateLimit(type, userId, time) {
+function addRateLimit(type, userId, time) {
 	rateLimit[type][userId] = true;
-	setTimeout(() => {
+	if(time) setTimeout(() => {
 		rateLimit[type][userId] = null;
 		delete rateLimit[type][userId];
 	}, time);
+}
+
+function removeRateLimit(type, userId) {
+	rateLimit[type][userId] = null;
+	delete rateLimit[type][userId];
 }
 
 telegramBot.on('message', msg => {
@@ -54,7 +60,7 @@ telegramBot.on('callback_query', msg => {
 		if(rateLimit['BtnMathMoreNumber'][msg.from.id]) return telegramBot.answerCallbackQuery(msg.id, {
 			text: 'You are rate-limited.'
 		});
-		doRateLimit('BtnMathMoreNumber', msg.from.id, 5000);
+		addRateLimit('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
 		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `${name}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title , msg.message.chat.id);
 		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
@@ -81,25 +87,46 @@ telegramBot.on('callback_query', msg => {
 		if(rateLimit['BtnVoteVoting'][msg.from.id]) return telegramBot.answerCallbackQuery(msg.id, {
 			text: 'You are rate-limited.'
 		});
-		doRateLimit('BtnVoteVoting', msg.from.id, 5000);
-		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `@${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
-		database.query('SELECT closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
+		addRateLimit('BtnVoteVoting', msg.from.id);
+		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
+		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
+			const voteData = JSON.parse(res[0].data);
 			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
 				text: 'This vote was closed.'
 			});
 			if(res[0].deleted) return telegramBot.answerCallbackQuery(msg.id, {
 				text: 'This vote was deleted.'
 			});
-			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [
-				data.vote, msg.from.id
-			]).then(res => {
+			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [ data.vote, msg.from.id ]).then(res2 => {
 				if(res.length) {
-					database.query(`UPDATE voting SET active=0 WHERE id=?`, res[0].id);
+					database.query(`UPDATE voting SET active=0 WHERE id=?`, res2[0].id);
 				}
 				database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote).then(() => {
 					database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
 						Date.now(), data.vote, msg.from.id, name, data.value
 					]);
+					if(voteData.type === 'public') {
+						database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
+							var selections = [];
+							for(var i = 0; i < voteData.selections.length; i++) {
+								var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
+								selections.push(`<b>${voteData.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
+							}
+							var inlineBtnArr = [];
+							for(var i = 0; i < voteData.selections.length; i++) {
+								inlineBtnArr.push([{
+									text: voteData.selections[i],
+									callback_data: JSON.stringify({
+										action: 'VoteVoting',
+										vote: data.vote,
+										value: i
+									})
+								}]);
+							}
+							telegramBot.editMessageText(`<b>${res[0].name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+						});
+					}
+					removeRateLimit('BtnVoteVoting', msg.from.id);
 					return telegramBot.answerCallbackQuery(msg.id, {
 						text: 'Your voting was recorded.'
 					});
