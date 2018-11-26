@@ -98,7 +98,7 @@ telegramBot.on('callback_query', msg => {
 				text: 'This vote was deleted.'
 			});
 			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [ data.vote, msg.from.id ]).then(res2 => {
-				if(res.length) {
+				if(res2.length) {
 					database.query(`UPDATE voting SET active=0 WHERE id=?`, res2[0].id);
 				}
 				database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote).then(() => {
