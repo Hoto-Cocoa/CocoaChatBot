@@ -147,3 +147,7 @@ telegramBot.on('callback_query', msg => {
 telegramBot.on('polling_error', (e) => {
 	logger.log('error', e);
 });
+
+process.on('unhandledRejection', (reason, p) => {
+	logger.log('error', reason);
+  });
