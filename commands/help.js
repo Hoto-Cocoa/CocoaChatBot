@@ -2,7 +2,7 @@ const msgObj = {
 	'//Search word': 'Search on the Web',
 	'=Expression': 'Calculate Expression',
 	'source': 'Find image source',
-	'vote [create name, selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]': 'Vote Command',
+	'vote [create name, [public|anonymous], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]': 'Vote Command',
 	'info': 'Get messsge info',
 	'school [breakfast|lunch|dinner|snack] City SchoolName': 'Get school food menu',
 	'get id': 'Get message of id',
