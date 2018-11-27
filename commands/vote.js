@@ -15,7 +15,7 @@ module.exports = (bot, logger, database) => {
 			if(action === 'create') {
 				logger.log('notice', 'User %s Used Vote Command(Create %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr.join(', '), msg.chat.title, msg.chat.id);
 				const name = msgArr.shift();
-				if(!['public', 'anonymous'].includes(type = msgArr.shift().toLowerCase())) {
+				if(!['public', 'anonymous', 'counter'].includes(type = msgArr.shift().toLowerCase())) {
 					return bot.sendMessage(msg.chat.id, `Wrong type! (${type})`, { reply_to_message_id: msg.message_id });
 				}
 				database.query('INSERT INTO vote(date, groupId, userId, username, name, data) VALUES(?, ?, ?, ?, ?, ?);', [
@@ -51,7 +51,7 @@ module.exports = (bot, logger, database) => {
 								})
 							}]);
 						}
-						return bot.sendMessage(msg.chat.id, `<b>${name}</b>${data.type === 'public' ? '\n\n' + selections.join('\n') : ''}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+						return bot.sendMessage(msg.chat.id, `<b>${name}</b>${(data.type === 'public' || data.type === 'counter') ? '\n\n' + selections.join('\n') : ''}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 					});
 				});
 			}

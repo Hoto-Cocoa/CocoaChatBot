@@ -105,12 +105,12 @@ telegramBot.on('callback_query', msg => {
 					database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
 						Date.now(), data.vote, msg.from.id, name, data.value
 					]);
-					if(voteData.type === 'public') {
+					if(voteData.type === 'public' || voteData.type === 'counter') {
 						database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
 							var selections = [];
 							for(var i = 0; i < voteData.selections.length; i++) {
 								var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
-								selections.push(`<b>${voteData.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
+								selections.push(`<b>${voteData.selections[i]}</b>: ${q.length}${q.length && voteData.type === 'public' ? `(${q.join(', ')})` : ''}`);
 							}
 							var inlineBtnArr = [];
 							for(var i = 0; i < voteData.selections.length; i++) {
