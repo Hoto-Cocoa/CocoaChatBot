@@ -27,23 +27,28 @@ const database = new Database(Config.Database, logger);
 
 require('./modules/CreateDatabase')(Config.Database, logger);
 
-const rateLimit = [];
-const rateLimits = ['BtnVoteVoting', 'BtnMathMoreNumber'];
-for(var i = 0; i < rateLimits.length; i++) {
-	rateLimit[rateLimits[i]] = [];
+const rateLimit = {
+	add: (type, userId, time) => {
+		if(!this.storage[type]) this.storage[type] = [];
+		this.storage[type][userId] = true;
+		if(time) setTimeout(() => {
+			this.storage[type][userId] = null;
+			delete this.storage[type][userId];
+		}, time);
+	},
+	get: (type, userId) => {
+		if(!this.storage[type]) this.storage[type] = [];
+		return this.storage[type][userId];
+	},
+	remove: (type, userId) => {
+		this.storage[type][userId] = null;
+		delete this.storage[type][userId];
+	},
+	init: () => {
+		this.storage = [];
+	}
 }
-function addRateLimit(type, userId, time) {
-	rateLimit[type][userId] = true;
-	if(time) setTimeout(() => {
-		rateLimit[type][userId] = null;
-		delete rateLimit[type][userId];
-	}, time);
-}
-
-function removeRateLimit(type, userId) {
-	rateLimit[type][userId] = null;
-	delete rateLimit[type][userId];
-}
+rateLimit.init();
 
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
@@ -57,10 +62,10 @@ telegramBot.on('callback_query', msg => {
 	const name = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 	if(data.action === 'MathMoreNumber') {
-		if(rateLimit['BtnMathMoreNumber'][msg.from.id]) return telegramBot.answerCallbackQuery(msg.id, {
+		if(rateLimit.get('BtnMathMoreNumber', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
 			text: 'You are rate-limited.'
 		});
-		addRateLimit('BtnMathMoreNumber', msg.from.id, 5000);
+		rateLimit.add('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
 		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `${name}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title , msg.message.chat.id);
 		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
@@ -84,10 +89,10 @@ telegramBot.on('callback_query', msg => {
 	}
 
 	if(data.action === 'VoteVoting') {
-		if(rateLimit['BtnVoteVoting'][msg.from.id]) return telegramBot.answerCallbackQuery(msg.id, {
+		if(rateLimit.get('BtnVoteVoting', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
 			text: 'You are rate-limited.'
 		});
-		addRateLimit('BtnVoteVoting', msg.from.id);
+		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
 		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
 			const voteData = JSON.parse(res[0].data);
@@ -126,7 +131,7 @@ telegramBot.on('callback_query', msg => {
 							telegramBot.editMessageText(`<b>${res[0].name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 						});
 					}
-					removeRateLimit('BtnVoteVoting', msg.from.id);
+					rateLimit.remove('BtnVoteVoting', msg.from.id);
 					return telegramBot.answerCallbackQuery(msg.id, {
 						text: 'Your voting was recorded.'
 					});
