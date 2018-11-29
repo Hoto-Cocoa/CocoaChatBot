@@ -8,7 +8,9 @@ module.exports = (bot, logger) => {
 			const readableId = id + (id === 1 ? 'st' : id === 2 ? 'nd' : id === 3 ? 'rd' : 'th');
 			logger.log('notice', 'User %s Used Get Command(Get %s) in %s(%s)', `${username}(${msg.from.id})`, msgText.substring(4), msg.chat.title, msg.chat.id);
 			if(!id) return bot.sendMessage(msg.chat.id, 'Wrong number!', { reply_to_message_id: msg.message_id });
-			try { return bot.sendMessage(msg.chat.id, `Here ${readableId} message!`, { reply_to_message_id: id }); } catch(e) { return bot.sendMessage(msg.chat.id, `Cannot find ${readableId} message!`, { reply_to_message_id: msg.message_id }); }
+			return bot.sendMessage(msg.chat.id, `Here ${readableId} message!`, { reply_to_message_id: id }).catch(() => {
+				return bot.sendMessage(msg.chat.id, `Cannot find ${readableId} message!`, { reply_to_message_id: msg.message_id });
+			})
 		}
 	});
 }
