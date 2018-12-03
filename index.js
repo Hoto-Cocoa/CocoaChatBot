@@ -50,20 +50,32 @@ const rateLimit = {
 }
 rateLimit.init();
 
+var languages = [];
+require('fs').readdirSync(__dirname + '/languages/').forEach(function(file) {
+	languages[file.substring(0, 2)] = require(`${__dirname}/languages/${file}`);
+});
+function getLanguage(language) {
+	var language = language.substring(0, 2);
+	return languages[language] ? languages[language] : languages['en'];
+}
+
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 });
-require('./commands/index')(telegramBot, logger, database);
+require('./commands/index')(telegramBot, logger, {
+	database, rateLimit, getLanguage
+});
 
 telegramBot.on('callback_query', msg => {
 	const data = JSON.parse(msg.data);
 	const name = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
+	const language = getLanguage(msg.from.language_code);
 
 	if(data.action === 'MathMoreNumber') {
 		if(rateLimit.get('BtnMathMoreNumber', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
-			text: 'You are rate-limited.'
+			text: language.rateLimit
 		});
 		rateLimit.add('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
@@ -79,7 +91,7 @@ telegramBot.on('callback_query', msg => {
 				var options = { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id };
 				if(data.value < 10 && json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
 					reply_markup: { inline_keyboard: [ [ {
-						text: 'More',
+						text: language.math.more,
 						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
 					} ] ] }
 				}, options);
@@ -90,17 +102,17 @@ telegramBot.on('callback_query', msg => {
 
 	if(data.action === 'VoteVoting') {
 		if(rateLimit.get('BtnVoteVoting', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
-			text: 'You are rate-limited.'
+			text: language.rateLimit
 		});
 		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
 		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
 			const voteData = JSON.parse(res[0].data);
 			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
-				text: 'This vote was closed.'
+				text: language.vote.wasClosed
 			});
 			if(res[0].deleted) return telegramBot.answerCallbackQuery(msg.id, {
-				text: 'This vote was deleted.'
+				text: language.vote.wasDeleted
 			});
 			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [ data.vote, msg.from.id ]).then(res2 => {
 				if(res2.length) {
@@ -133,7 +145,7 @@ telegramBot.on('callback_query', msg => {
 					}
 					rateLimit.remove('BtnVoteVoting', msg.from.id);
 					return telegramBot.answerCallbackQuery(msg.id, {
-						text: 'Your voting was recorded.'
+						text: language.vote.recorded
 					});
 				});
 			});
@@ -150,7 +162,7 @@ telegramBot.on('callback_query', msg => {
 });
 
 telegramBot.on('polling_error', (e) => {
-	logger.log('error', e);
+	logger.log('error', e.stack);
 });
 
 process.on('unhandledRejection', (reason, p) => {

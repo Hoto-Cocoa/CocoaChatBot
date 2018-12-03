@@ -1,0 +1,47 @@
+{
+	"rateLimit": "You are rate-limited.",
+	"vote": {
+		"created": "Created vote \"%s\"(#%d)",
+		"opened": "Vote %s(#%d) opened.",
+		"closed": "Vote %s(#%d) closed.",
+		"deleted": "Vote %s(#%d) deleted.",
+		"wasClosed": "This vote was closed.",
+		"wasDeleted": "This vote was deleted.",
+		"alreadyOpened": "This vote already opened.",
+		"alreadyClosed": "This vote already closed.",
+		"wrongType": "Wrong Type! (%s)",
+		"notThisChat": "This vote not created in this chat. Please execute this command in chat that this vote created.",
+		"notClosed": "This vote not closed.",
+		"recorded": "Your voting was recorded."
+	},
+	"get": { 
+		"result": "Here %s message!",
+		"noResult": "Cannot find %s message!",
+		"wrongNumber": "Wrong Number!"
+	},
+	"math": {
+		"wrongInput": "Wrong Input!",
+		"more": "More",
+		"banned": "This expression was banned."
+	},
+	"school": {
+		"choice": "Choice your school.",
+		"tooManyResults": "%d schools were searched and only 10 schools were sent. Please specify your school name more."
+	},
+	"source": {
+		"viewOn": "View on %s",
+		"similarity": "Similarity",
+		"noPhoto": "No photo detected!"
+	},
+	"help": {
+		"//Search word": "Search on the Web",
+		"=Expression": "Calculate Expression",
+		"source": "Find image source",
+		"vote [create name, [public|anonymous|counter], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]": "Vote Command",
+		"info": "Get messsge info",
+		"school [breakfast|lunch|dinner|snack] City SchoolName": "Get school food menu",
+		"get id": "Get message of id",
+		"help": "Display this message",
+		"Support Chat (ko-KR)": "@CocoaCafe"
+	}
+}

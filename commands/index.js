@@ -1,5 +1,5 @@
-module.exports = function(bot, logger, database) {
+module.exports = function(bot, logger, utils) {
 	require('fs').readdirSync(__dirname).forEach(function(file) {
-		file == 'index.js' || require(`${__dirname}/${file}`)(bot, logger, database);
+		file == 'index.js' || require(`${__dirname}/${file}`)(bot, logger, utils);
 	});
 }
