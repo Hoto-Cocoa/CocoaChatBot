@@ -55,7 +55,7 @@ require('fs').readdirSync(__dirname + '/languages/').forEach(function(file) {
 	languages[file.substring(0, 2)] = require(`${__dirname}/languages/${file}`);
 });
 function getLanguage(language) {
-	var language = language.substring(0, 2);
+	language = language ? language.substring(0, 2) : 'en';
 	return languages[language] ? languages[language] : languages['en'];
 }
 
