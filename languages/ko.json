@@ -1,0 +1,74 @@
+{
+    "rateLimit": "시간 제한에 걸려 있습니다.",
+    "vote": {
+        "created": "투표 \"%s\"(#%d)를 만들었습니다.",
+        "opened": "투표 %s(#%d)를 열었습니다.",
+        "closed": "투표 %s(#%d)를 닫았습니다.",
+        "deleted": "투표 %s(#%d)를 지웠습니다.",
+        "wasClosed": "이 투표는 닫혔습니다.",
+        "wasDeleted": "이 투표는 지워졌습니다.",
+        "alreadyOpened": "이 투표는 이미 열려 있습니다.",
+        "alreadyClosed": "이 투표는 이미 닫혀 있습니다.",
+        "wrongType": "잘못된 유형입니다! (%s)",
+        "notThisChat": "이 투표는 본 채팅방에서 생성하지 않았습니다. 투표를 만든 채팅방에서 명령어를 실행해주세요.",
+        "notClosed": "이 투표는 닫혀 있지 않습니다.",
+        "recorded": "당신의 표가 반영되었습니다."
+    },
+    "get": {
+        "result": "여기 %s번째 메시지에요!",
+        "noResult": "%s번째 메시지를 찾을 수 없습니다.",
+        "wrongNumber": "잘못된 숫자입니다."
+    },
+    "math": {
+        "wrongInput": "잘못된 입력입니다.",
+        "more": "더 보기",
+        "banned": "이 식은 금지되어 있습니다."
+    },
+    "school": {
+        "choice": "학교를 선택하세요.",
+        "tooManyResults": "%d개의 학교를 찾았으나 10개의 학교만 보냈습니다. 학교명을 더 자세히 기입해주세요."
+    },
+    "source": {
+        "viewOn": "%s 에서 보기",
+        "similarity": "유사도",
+        "noPhoto": "사진을 찾을 수 없습니다!"
+    },
+    "help": {
+        "search": {
+            "title": "//찾아볼 것",
+            "value": "입력한 것을 웹에서 찾아봅니다."
+        },
+        "math": {
+            "title": "=표현식",
+            "value": "입력한 식을 계산합니다."
+        },
+        "source": {
+            "title": "source",
+            "value": "그림의 출처를 찾습니다."
+        },
+        "vote": {
+            "title": "vote [create 이름, [public|anonymous|counter], 선택지1, 선택지2...|view 고유번호|result 고유번호|aresult 고유번호|open 고유번호|close 고유번호|delete 고유번호]",
+            "value": "투표 명령입니다."
+        },
+        "info": {
+            "title": "info",
+            "value": "메시지의 정보를 가져옵니다."
+        },
+        "school": {
+            "title": "school [breakfast|lunch|dinner|snack] 도시 학교명",
+            "value": "학교 급식 메뉴를 가져옵니다."
+        },
+        "get": {
+            "title": "get id",
+            "value": "입력한 고유 번호의 메시지를 가져옵니다."
+        },
+        "help": {
+            "title": "help",
+            "value": "이 메시지를 보여줍니다."
+        },
+        "support": {
+            "title": "지원 채팅방 (한국어)",
+            "value": "@CocoaCafe"
+        }
+    }
+}

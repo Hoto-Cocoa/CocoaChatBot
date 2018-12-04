@@ -1,0 +1,74 @@
+{
+    "rateLimit": "制限されたユーザーです。",
+    "vote": {
+        "created": "\"%s\" 投票を作成しました。(#%d)",
+        "opened": "%s(#%d) 投票を開始しました。",
+        "closed": "%s(#%d) 投票を終了しました。",
+        "deleted": "%s(#%d) 投票を削除しました。",
+        "wasClosed": "この投票は終了しました。",
+        "wasDeleted": "この投票は削除されました。",
+        "alreadyOpened": "この投票はすでに進行中です。",
+        "alreadyClosed": "この投票はすでに終了しました。",
+        "wrongType": "間違ったタイプです！ (%s)",
+        "notThisChat": "このグループで作成されていない投票です。投票を作成したグループで、コマンドを使用してください。",
+        "notClosed": "この投票はすでに進行中です。",
+        "recorded": "投票が記録された。"
+    },
+    "get": {
+        "result": "%s 番メッセージです！",
+        "noResult": "%s 度メッセージを見つけることができません！",
+        "wrongNumber": "間違った番号です！"
+    },
+    "math": {
+        "wrongInput": "間違った入力です！",
+        "more": "もっと見る",
+        "banned": "結果を表示できません。"
+    },
+    "school": {
+        "choice": "照会する学校を選択してください。",
+        "tooManyResults": "%d 個の学校を検索し、10個まで表示した結果です。正確な結果を見るには学校名を、より具体的に入力してください。"
+    },
+    "source": {
+        "viewOn": "%s で見る",
+        "similarity": "類似性",
+        "noPhoto": "イメージを見つけることができません！"
+    },
+    "help": {
+        "search": {
+            "title": "//Search",
+            "value": "ウェブ検索"
+        },
+        "math": {
+            "title": "=Expression",
+            "value": "式を計算する"
+        },
+        "source": {
+            "title": "source",
+            "value": "画像検索"
+        },
+        "vote": {
+            "title": "vote [create name, [public|anonymous|counter], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]",
+            "value": "投票コマンド"
+        },
+        "info": {
+            "title": "info",
+            "value": "メッセージ情報を表示"
+        },
+        "school": {
+            "title": "school [breakfast|lunch|dinner|snack] City SchoolName",
+            "value": "給食メニュー紹介"
+        },
+        "get": {
+            "title": "get id",
+            "value": "入力したIDのメッセージの照会"
+        },
+        "help": {
+            "title": "help",
+            "value": "ヘルプ（このメッセージ）を表示"
+        },
+        "support": {
+            "title": "サポート（韓国語）",
+            "value": "@CocoaCafe"
+        }
+    }
+}
