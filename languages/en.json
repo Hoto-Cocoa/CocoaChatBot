@@ -34,14 +34,41 @@
 		"noPhoto": "No photo detected!"
 	},
 	"help": {
-		"//Search word": "Search on the Web",
-		"=Expression": "Calculate Expression",
-		"source": "Find image source",
-		"vote [create name, [public|anonymous|counter], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]": "Vote Command",
-		"info": "Get messsge info",
-		"school [breakfast|lunch|dinner|snack] City SchoolName": "Get school food menu",
-		"get id": "Get message of id",
-		"help": "Display this message",
-		"Support Chat (ko-KR)": "@CocoaCafe"
+		"search": {
+			"title": "//Search",
+			"value": "Search on the Web"
+		},
+		"math": {
+			"title": "=Expression",
+			"value": "Calculate Expression"
+		},
+		"source": {
+			"title": "source",
+			"value": "Find Image Source"			
+		},
+		"vote": {
+			"title": "vote [create name, [public|anonymous|counter], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]",
+			"value": "Vote Command"
+		},
+		"info": {
+			"title": "info",
+			"value": "Get Messsge Info"
+		},
+		"school": {
+			"title": "school [breakfast|lunch|dinner|snack] City SchoolName",
+			"value": "Get school food menu"
+		},
+		"get": {
+			"title": "get id",
+			"value": "Get Message of id"
+		},
+		"help": {
+			"title": "help",
+			"value": "Display This Message"		
+		},
+		"support": {
+			"title": "Support Chat (ko-KR)",
+			"value": "@CocoaCafe"
+		}
 	}
 }

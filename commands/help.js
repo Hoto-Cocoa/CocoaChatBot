@@ -9,7 +9,7 @@ module.exports = (bot, logger, utils) => {
 			const keys = Object.keys(language);
 			var msgArr = [];
 			for(var i = 0; i < keys.length; i++) {
-				msgArr.push(`<b>${keys[i]}</b> - ${language[keys[i]]}`);
+				msgArr.push(`<b>${language[keys[i]].title}</b> - ${language[keys[i]].value}`);
 			}
 			bot.sendMessage(msg.chat.id, msgArr.join('\n'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 		}
