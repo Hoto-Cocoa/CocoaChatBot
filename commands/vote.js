@@ -68,7 +68,7 @@ module.exports = (bot, logger, utils) => {
 				const voteData = await utils.database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id);
 				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
 				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				if(!voteData[0].closed) return bot.sendMessage(msg.chat.id, language.alreadyOpened, { reply_to_message_id: msg.message_id });
+				if(voteData[0].closed) return bot.sendMessage(msg.chat.id, language.alreadyClosed, { reply_to_message_id: msg.message_id });
 				utils.database.query('UPDATE vote SET closed=1 WHERE id=?;', id).then(() => {
 					return bot.sendMessage(msg.chat.id, util.format(language.closed, voteData[0].name, id), { reply_to_message_id: msg.message_id });
 				});
