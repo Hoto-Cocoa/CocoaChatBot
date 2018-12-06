@@ -16,14 +16,14 @@ module.exports = (bot, logger, utils) => {
 				if(res.length > 1) {
 					var inlineBtnArr = [];
 					for(var i = 0; i < res.length && i < 10; i++) {
-						inlineBtnArr.push([{
+						inlineBtnArr.push( [ {
 							text: res[i].name,
 							callback_data: JSON.stringify({
 								action: 'SchoolChoice',
 								code: res[i].code,
 								type: msgArr[0]
 							})
-						}]);
+						} ] );
 					}
 					return bot.sendMessage(msg.chat.id, (res.length > 10) ? [ language.choice, util.format(language.tooManyResults, res.length) ].join('\n') : language.choice, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				}

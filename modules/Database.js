@@ -16,8 +16,7 @@ module.exports = class Database {
 			logger.log('error', e);
 			if(e.code === 'PROTOCOL_CONNECTION_LOST') {
 				constructor(config);
-			}
-			else throw e;
+			} else throw e;
 		});
 		setInterval(() => {
 			this.connection.query('SELECT 1 LIMIT 1;');

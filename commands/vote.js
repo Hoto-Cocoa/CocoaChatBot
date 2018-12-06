@@ -11,12 +11,12 @@ module.exports = (bot, logger, utils) => {
 			var msgArr = msgText.substring(5).split(' ');
 			const action = msgArr.shift().toLowerCase();
 			msgArr = msgArr.join(' ').split(',');
-			for(var i = 0; i < msgArr.length; i++) msgArr[i] = msgArr[i].trim();
+			for(let i = 0; i < msgArr.length; i++) msgArr[i] = msgArr[i].trim();
 
 			if(action === 'create') {
 				logger.log('notice', 'User %s Used Vote Command(Create %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr.join(', '), msg.chat.title, msg.chat.id);
 				const name = msgArr.shift();
-				if(!['public', 'anonymous', 'counter'].includes(type = msgArr.shift().toLowerCase())) {
+				if(![ 'public', 'anonymous', 'counter' ].includes(type = msgArr.shift().toLowerCase())) {
 					return bot.sendMessage(msg.chat.id, util.format(language.wrongType, type), { reply_to_message_id: msg.message_id });
 				}
 				const res = await utils.database.query('INSERT INTO vote(date, groupId, userId, username, name, data) VALUES(?, ?, ?, ?, ?, ?);', [
@@ -34,18 +34,18 @@ module.exports = (bot, logger, utils) => {
 				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
 				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
 				voteData[0].data = JSON.parse(voteData[0].data);
-				var selections = [], inlineBtnArr = [];
-				for(var i = 0; i < voteData[0].data.selections.length; i++) {
-					var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
+				let selections = [], inlineBtnArr = [];
+				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length && voteData[0].data.type === 'public' ? `(${q.join(', ')})` : ''}`);
-					inlineBtnArr.push([{
+					inlineBtnArr.push( [ {
 						text: voteData[0].data.selections[i],
 						callback_data: JSON.stringify({
 							action: 'VoteVoting',
 							vote: id,
 							value: i
 						})
-					}]);
+					} ] );
 				}
 				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>${(voteData[0].data.type === 'public' || voteData[0].data.type === 'counter') ? '\n\n' + selections.join('\n') : ''}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 			}
@@ -81,9 +81,9 @@ module.exports = (bot, logger, utils) => {
 				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
 				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.deleted, { reply_to_message_id: msg.message_id });
 				voteData[0].data = JSON.parse(voteData[0].data);
-				var selections = [];
-				for(var i = 0; i < voteData[0].data.selections.length; i++) {
-					var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
+				let selections = [];
+				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length && voteData[0].data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 				}
 				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
@@ -96,9 +96,9 @@ module.exports = (bot, logger, utils) => {
 				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
 				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
 				voteData[0].data = JSON.parse(voteData[0].data);
-				var selections = [];
-				for(var i = 0; i < voteData[0].data.selections.length; i++) {
-					var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
+				let selections = [];
+				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
 				}
 				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });

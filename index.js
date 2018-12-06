@@ -79,7 +79,7 @@ telegramBot.on('callback_query', msg => {
 		});
 		rateLimit.add('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
-		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `${name}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title , msg.message.chat.id);
+		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `${name}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title, msg.message.chat.id);
 		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
 			var json = '';
 			res.on('data', data => {
@@ -105,7 +105,7 @@ telegramBot.on('callback_query', msg => {
 			text: language.rateLimit
 		});
 		rateLimit.add('BtnVoteVoting', msg.from.id);
-		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title , msg.message.chat.id);
+		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
 		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
 			const voteData = JSON.parse(res[0].data);
 			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
@@ -124,21 +124,21 @@ telegramBot.on('callback_query', msg => {
 					]);
 					if(voteData.type === 'public' || voteData.type === 'counter') {
 						database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
-							var selections = [];
-							for(var i = 0; i < voteData.selections.length; i++) {
-								var q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
+							let selections = [];
+							for(let i = 0; i < voteData.selections.length; i++) {
+								let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
 								selections.push(`<b>${voteData.selections[i]}</b>: ${q.length}${q.length && voteData.type === 'public' ? `(${q.join(', ')})` : ''}`);
 							}
-							var inlineBtnArr = [];
-							for(var i = 0; i < voteData.selections.length; i++) {
-								inlineBtnArr.push([{
+							let inlineBtnArr = [];
+							for(let i = 0; i < voteData.selections.length; i++) {
+								inlineBtnArr.push( [ {
 									text: voteData.selections[i],
 									callback_data: JSON.stringify({
 										action: 'VoteVoting',
 										vote: data.vote,
 										value: i
 									})
-								}]);
+								} ] );
 							}
 							telegramBot.editMessageText(`<b>${res[0].name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 						});
@@ -153,7 +153,7 @@ telegramBot.on('callback_query', msg => {
 	}
 
 	if(data.action === 'SchoolChoice') {
-		logger.log('notice', 'User %s Used School Choice Button(School %s, Type %s) in %s(%s)', `${name}(${msg.message.from.id})`, data.code, data.type, msg.message.chat.title , msg.message.chat.id);
+		logger.log('notice', 'User %s Used School Choice Button(School %s, Type %s) in %s(%s)', `${name}(${msg.message.from.id})`, data.code, data.type, msg.message.chat.title, msg.message.chat.id);
 		schoolMeal.get(data.type, data.code, (err, res) => {
 			if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));
 			return telegramBot.editMessageText(res, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id });
