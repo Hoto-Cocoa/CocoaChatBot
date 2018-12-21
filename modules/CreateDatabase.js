@@ -93,6 +93,35 @@ module.exports = (config, logger) => {
 		}
 	});
 	
+	queryInterface.createTable('setting', {
+		id: {
+			type: Sequelize.INTEGER,
+			primaryKey: true,
+			autoIncrement: true
+		},
+		date: {
+			type: Sequelize.BIGINT,
+			allowNull: false
+		},
+		userId:  {
+			type: Sequelize.BIGINT,
+			allowNull: false
+		},
+		key: { 
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		value: {
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		active: {
+			type: Sequelize.BOOLEAN,
+			allowNull: false,
+			defaultValue: true
+		}
+	});
+	
 	function sequelizeLogger(msg) {
 		logger.log('debug', 'Sequelize Executed "%s"', msg);
 	}

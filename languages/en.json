@@ -70,5 +70,8 @@
 			"title": "Support Chat (ko-KR)",
 			"value": "@CocoaCafe"
 		}
+	},
+	"setting": {
+		"done": "Your setting was recorded."
 	}
 }
