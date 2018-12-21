@@ -52,10 +52,11 @@ rateLimit.init();
 
 var languages = [];
 require('fs').readdirSync(__dirname + '/languages/').forEach(function(file) {
-	languages[file.substring(0, 2)] = require(`${__dirname}/languages/${file}`);
+	languages[file.substring(0, file.length - 5)] = require(`${__dirname}/languages/${file}`);
 });
-function getLanguage(langCode, msgCategory) {
-	langCode = langCode ? langCode.substring(0, 2) : 'en';
+async function getLanguage(langCode, userId, msgCategory) {
+	languageSetting = await database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
+	langCode = languageSetting ? languageSetting : langCode ? langCode.substring(0, 2) : 'en';
 	languageData = languages[langCode] ? languages[langCode] : languages['en'];
 	return (msgCode, ...args) => {
 		msg = languageData[msgCategory] ? languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : languages['en'][msgCategory] ? languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : 'Error: Invalid Message Code';

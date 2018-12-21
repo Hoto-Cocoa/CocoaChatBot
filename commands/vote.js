@@ -5,7 +5,7 @@ module.exports = (bot, logger, utils) => {
 	bot.on('message', async msg => {
 		const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		const getLanguage = utils.getLanguage(msg.from.language_code, 'vote');
+		const getLanguage = await utils.getLanguage(msg.from.language_code, msg.from.id, 'vote');
 
 		if(msgText.toLowerCase().startsWith('vote ')) {
 			var msgArr = msgText.substring(5).split(' ');
