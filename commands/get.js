@@ -4,7 +4,7 @@ module.exports = (bot, logger, utils) => {
 	bot.on('message', async msg => {
 		const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		const getLanguage = await utils.getLanguage(msg.from.language_code, 'get');
+		const getLanguage = await utils.getLanguage(msg.from.language_code, msg.from.id, 'get');
 
 		if(msgText.startsWith('get ')) {
 			const id = parseInt(msgText.substring(4));
