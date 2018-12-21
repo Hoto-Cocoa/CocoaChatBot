@@ -70,5 +70,8 @@
             "title": "지원 채팅방 (한국어)",
             "value": "@CocoaCafe"
         }
+    },
+    "setting": {
+        "done": "설정이 기록되었습니다."
     }
 }

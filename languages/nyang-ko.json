@@ -1,0 +1,77 @@
+{
+    "rateLimit": "시간 제한에 걸려있다냥.",
+    "vote": {
+        "created": "투표 \"%s\"(#%d)를 만들었다냥.",
+        "opened": "투표 %s(#%d)를 열었다냥.",
+        "closed": "투표 %s(#%d)를 닫았다냥.",
+        "deleted": "투표 %s(#%d)를 지웠다냥.",
+        "wasClosed": "이 투표는 닫혔다냥.",
+        "wasDeleted": "이 투표는 지워졌다냥.",
+        "alreadyOpened": "이 투표는 이미 열려있다냥.",
+        "alreadyClosed": "이 투표는 이미 닫혀있다냥.",
+        "wrongType": "잘못된 유형이다냥! (%s)",
+        "notThisChat": "이 투표는 이 채팅방에서 생성하지 않았다냥. 투표를 만든 채팅방에서 명령어를 실행해달라냥.",
+        "notClosed": "이 투표는 닫혀있지 않다냥.",
+        "recorded": "표가 반영됐다냥."
+    },
+    "get": {
+        "result": "여기 %s번째 메시지다냥!",
+        "noResult": "%s번째 메시지를 찾을 수 없다냥!",
+        "wrongNumber": "잘못된 숫자다냥."
+    },
+    "math": {
+        "wrongInput": "잘못된 입력이다냥.",
+        "more": "더 보기",
+        "banned": "이 식은 금지되어있다냥."
+    },
+    "school": {
+        "choice": "학교를 선택하라냥.",
+        "tooManyResults": "%d개의 학교나 검색돼서 10개의 학교만 보냈다냥. 더 정확히 말해달라냥."
+    },
+    "source": {
+        "viewOn": "%s에서 보기",
+        "similarity": "유사도",
+        "noPhoto": "사진을 찾을 수 없다냥!"
+    },
+    "help": {
+        "search": {
+            "title": "//찾아볼 것",
+            "value": "입력한 것을 웹에서 찾아본다냥."
+        },
+        "math": {
+            "title": "=표현식",
+            "value": "입력한 식을 계산한다냥."
+        },
+        "source": {
+            "title": "source",
+            "value": "그림의 출처를 찾는다냥."
+        },
+        "vote": {
+            "title": "vote [create 이름, [public|anonymous|counter], 선택지1, 선택지2...|view 고유번호|result 고유번호|aresult 고유번호|open 고유번호|close 고유번호|delete 고유번호]",
+            "value": "투표 명령이다냥."
+        },
+        "info": {
+            "title": "info",
+            "value": "메시지의 정보를 가져온다냥."
+        },
+        "school": {
+            "title": "school [breakfast|lunch|dinner|snack] 도시 학교명",
+            "value": "학교 급식 메뉴를 가져온다냥."
+        },
+        "get": {
+            "title": "get id",
+            "value": "입력한 고유번호의 메시지를 가져온다냥."
+        },
+        "help": {
+            "title": "help",
+            "value": "이 메시지를 보여준다냥."
+        },
+        "support": {
+            "title": "지원 채팅방 (한국어)",
+            "value": "@CocoaCafe"
+        }
+    },
+    "setting": {
+        "done": "설정이 기록되었다냥."
+    }
+}
