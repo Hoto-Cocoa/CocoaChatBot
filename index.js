@@ -63,8 +63,9 @@ async function getLanguage(langCode, userId, msgCategory) {
 		return args ? require('util').format(msg, ...args) : msg;
 	}
 }
-function getLanguageData(language) {
-	language = language ? language.substring(0, 2) : 'en';
+async function getLanguageData(language, userId) {
+	languageSetting = await database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
+	language = languageSetting ? languageSetting : language ? language.substring(0, 2) : 'en';
 	return languages[language] ? languages[language] : languages['en'];
 }
 
@@ -82,9 +83,9 @@ telegramBot.on('callback_query', async msg => {
 	const name = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 	if(data.action === 'MathMoreNumber') {
-		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'math');
+		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'math'), languageData = await getLanguageData(msg.from.language_code, msg.from.id);
 		if(rateLimit.get('BtnMathMoreNumber', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
-			text: getLanguageData(msg.from.language_code).rateLimit
+			text: languageData.rateLimit
 		});
 		rateLimit.add('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
@@ -110,9 +111,9 @@ telegramBot.on('callback_query', async msg => {
 	}
 
 	if(data.action === 'VoteVoting') {
-		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'vote');
+		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'vote'), languageData = await getLanguageData(msg.from.language_code, msg.from.id);
 		if(rateLimit.get('BtnVoteVoting', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
-			text: getLanguageData(msg.from.language_code).rateLimit
+			text: languageData.rateLimit
 		});
 		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
