@@ -2,7 +2,7 @@ module.exports = (bot, logger, utils) => {
 	bot.on('message', msg => {
 		const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		const language = utils.getLanguage(msg.from.language_code).help;
+		const language = utils.getLanguageData(msg.from.language_code).help;
 
 		if(msgText.toLowerCase() === 'help' || msgText === '/start') {
 			logger.log('notice', 'User %s Used Help Command in %s(%s)', `${username}(${msg.from.id})`, msg.chat.title, msg.chat.id);

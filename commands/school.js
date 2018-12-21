@@ -5,7 +5,7 @@ module.exports = (bot, logger, utils) => {
 	bot.on('message', msg => {
 		const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		const language = utils.getLanguage(msg.from.language_code).school;
+		const getLanguage = utils.getLanguage(msg.from.language_code, 'school');
 
 		if(msgText.startsWith('school ')) {
 			const msgArr = msgText.substring(7).split(' ');
@@ -25,7 +25,7 @@ module.exports = (bot, logger, utils) => {
 							})
 						} ] );
 					}
-					return bot.sendMessage(msg.chat.id, (res.length > 10) ? [ language.choice, util.format(language.tooManyResults, res.length) ].join('\n') : language.choice, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+					return bot.sendMessage(msg.chat.id, (res.length > 10) ? [ getLanguage('choice'), getLanguage('tooManyResults', res.length) ].join('\n') : getLanguage('choice'), { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				}
 				schoolMeal.get(msgArr[0], res[0].code, (err, resu) => {
 					if(err) return (logger.log('error', err) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));

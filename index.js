@@ -54,7 +54,15 @@ var languages = [];
 require('fs').readdirSync(__dirname + '/languages/').forEach(function(file) {
 	languages[file.substring(0, 2)] = require(`${__dirname}/languages/${file}`);
 });
-function getLanguage(language) {
+function getLanguage(langCode, msgCategory) {
+	langCode = langCode ? langCode.substring(0, 2) : 'en';
+	languageData = languages[langCode] ? languages[langCode] : languages['en'];
+	return (msgCode, ...args) => {
+		msg = languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code';
+		return args ? require('util').format(msg, ...args) : msg;
+	}
+}
+function getLanguageData(language) {
 	language = language ? language.substring(0, 2) : 'en';
 	return languages[language] ? languages[language] : languages['en'];
 }
@@ -65,7 +73,7 @@ telegramBot.on('message', msg => {
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 });
 require('./commands/index')(telegramBot, logger, {
-	database, rateLimit, getLanguage
+	database, rateLimit, getLanguage, getLanguageData
 });
 
 telegramBot.on('callback_query', msg => {
