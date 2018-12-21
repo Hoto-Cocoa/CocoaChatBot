@@ -32,14 +32,14 @@ module.exports = (bot, logger, utils) => {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(View %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				voteData[0].data = JSON.parse(voteData[0].data);
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
+				voteData.data = JSON.parse(voteData.data);
 				let selections = [], inlineBtnArr = [];
-				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+				for(let i = 0; i < voteData.data.selections.length; i++) {
 					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
-					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length && voteData[0].data.type === 'public' ? `(${q.join(', ')})` : ''}`);
+					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 					inlineBtnArr.push( [ {
-						text: voteData[0].data.selections[i],
+						text: voteData.data.selections[i],
 						callback_data: JSON.stringify({
 							action: 'VoteVoting',
 							vote: id,
@@ -47,18 +47,18 @@ module.exports = (bot, logger, utils) => {
 						})
 					} ] );
 				}
-				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>${(voteData[0].data.type === 'public' || voteData[0].data.type === 'counter') ? '\n\n' + selections.join('\n') : ''}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+				return bot.sendMessage(msg.chat.id, `<b>${voteData.name}</b>${(voteData.data.type === 'public' || voteData.data.type === 'counter') ? '\n\n' + selections.join('\n') : ''}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 			}
 
 			if(action === 'open') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Open %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id);
-				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				if(!voteData[0].closed) return bot.sendMessage(msg.chat.id, language.alreadyOpened, { reply_to_message_id: msg.message_id });
+				if(parseInt(voteData.groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
+				if(!voteData.closed) return bot.sendMessage(msg.chat.id, language.alreadyOpened, { reply_to_message_id: msg.message_id });
 				utils.database.query('UPDATE vote SET closed=0 WHERE id=?;', id).then(() => {
-					return bot.sendMessage(msg.chat.id, util.format(language.opened, voteData[0].name, id), { reply_to_message_id: msg.message_id });
+					return bot.sendMessage(msg.chat.id, util.format(language.opened, voteData.name, id), { reply_to_message_id: msg.message_id });
 				});
 			}
 
@@ -66,11 +66,11 @@ module.exports = (bot, logger, utils) => {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Close %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id);
-				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				if(voteData[0].closed) return bot.sendMessage(msg.chat.id, language.alreadyClosed, { reply_to_message_id: msg.message_id });
+				if(parseInt(voteData.groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
+				if(voteData.closed) return bot.sendMessage(msg.chat.id, language.alreadyClosed, { reply_to_message_id: msg.message_id });
 				utils.database.query('UPDATE vote SET closed=1 WHERE id=?;', id).then(() => {
-					return bot.sendMessage(msg.chat.id, util.format(language.closed, voteData[0].name, id), { reply_to_message_id: msg.message_id });
+					return bot.sendMessage(msg.chat.id, util.format(language.closed, voteData.name, id), { reply_to_message_id: msg.message_id });
 				});
 			}
 
@@ -78,41 +78,41 @@ module.exports = (bot, logger, utils) => {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Result %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
-				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.deleted, { reply_to_message_id: msg.message_id });
-				voteData[0].data = JSON.parse(voteData[0].data);
+				if(parseInt(voteData.groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.deleted, { reply_to_message_id: msg.message_id });
+				voteData.data = JSON.parse(voteData.data);
 				let selections = [];
-				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+				for(let i = 0; i < voteData.data.selections.length; i++) {
 					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
-					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length && voteData[0].data.type === 'public' ? `(${q.join(', ')})` : ''}`);
+					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 				}
-				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
+				return bot.sendMessage(msg.chat.id, `<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 			}
 
 			if(action === 'aresult') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(AResult %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
-				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				voteData[0].data = JSON.parse(voteData[0].data);
+				if(parseInt(voteData.groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
+				voteData.data = JSON.parse(voteData.data);
 				let selections = [];
-				for(let i = 0; i < voteData[0].data.selections.length; i++) {
+				for(let i = 0; i < voteData.data.selections.length; i++) {
 					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
-					selections.push(`<b>${voteData[0].data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
+					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
 				}
-				return bot.sendMessage(msg.chat.id, `<b>${voteData[0].name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
+				return bot.sendMessage(msg.chat.id, `<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
 			}
 
 			if(action === 'delete') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Delete %s) in %s(%s)', `${username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
 				const voteData = await utils.database.query('SELECT groupId, name, closed, deleted FROM vote WHERE id=?;', id);
-				if(parseInt(voteData[0].groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
-				if(voteData[0].deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
-				if(!voteData[0].closed) return bot.sendMessage(msg.chat.id, language.notClosed, { reply_to_message_id: msg.message_id });
+				if(parseInt(voteData.groupId) !== msg.chat.id) return bot.sendMessage(msg.chat.id, language.notThisChat, { reply_to_message_id: msg.message_id });
+				if(voteData.deleted) return bot.sendMessage(msg.chat.id, language.wasDeleted, { reply_to_message_id: msg.message_id });
+				if(!voteData.closed) return bot.sendMessage(msg.chat.id, language.notClosed, { reply_to_message_id: msg.message_id });
 				utils.database.query('UPDATE vote SET deleted=1 WHERE id=?;', id).then(() => {
-					return bot.sendMessage(msg.chat.id, util.format(language.deleted, voteData[0].name, id), { reply_to_message_id: msg.message_id });
+					return bot.sendMessage(msg.chat.id, util.format(language.deleted, voteData.name, id), { reply_to_message_id: msg.message_id });
 				});
 			}
 		}
