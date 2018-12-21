@@ -58,7 +58,7 @@ function getLanguage(langCode, msgCategory) {
 	langCode = langCode ? langCode.substring(0, 2) : 'en';
 	languageData = languages[langCode] ? languages[langCode] : languages['en'];
 	return (msgCode, ...args) => {
-		msg = languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code';
+		msg = languageData[msgCategory] ? languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : languages['en'][msgCategory] ? languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : 'Error: Invalid Message Code';
 		return args ? require('util').format(msg, ...args) : msg;
 	}
 }
