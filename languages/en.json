@@ -73,5 +73,15 @@
 	},
 	"setting": {
 		"done": "Your setting was recorded."
+	},
+	"info": {
+		"messageId": "Message ID",
+		"date": "Date",
+		"userId": "User ID",
+		"userIsBot": "Is Bot?",
+		"userFirstName": "First Name",
+		"userLastName": "Last Name",
+		"userUsername": "Username",
+		"userLanguageCode": "Language Code"
 	}
 }

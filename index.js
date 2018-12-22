@@ -22,7 +22,7 @@ const logger = Logger.createLogger({
 		})
 	]
 });
-const telegramBot = new TelegramBot(Config.Telegram.Token, { polling: true });
+const telegramBot = new TelegramBot(Config.Telegram.Token, Config.Test ? { polling: { params: { timeout : 1 }}} : { polling: true });
 const database = new Database(Config.Database, logger);
 
 require('./modules/CreateDatabase')(Config.Database, logger);
