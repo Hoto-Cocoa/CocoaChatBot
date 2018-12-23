@@ -82,6 +82,10 @@
 		"userFirstName": "First Name",
 		"userLastName": "Last Name",
 		"userUsername": "Username",
-		"userLanguageCode": "Language Code"
+		"userLanguageCode": "Language Code",
+		"chatId": "Chat ID",
+		"chatTitle": "Chat Title",
+		"chatType": "Chat Type",
+		"debug": "Debug"
 	}
 }
