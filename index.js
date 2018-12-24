@@ -58,7 +58,7 @@ telegramBot.on('message', msg => {
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 });
 require('./commands/index')(telegramBot, logger, {
-	database, rateLimit, getLanguage: language.getLanguage, getLanguageData: language.getLanguageData
+	database, rateLimit, language
 });
 
 telegramBot.on('callback_query', async msg => {

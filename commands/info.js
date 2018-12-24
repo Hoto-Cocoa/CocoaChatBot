@@ -2,7 +2,7 @@ module.exports = (bot, logger, utils) => {
 	bot.on('message', async msg => {
 		const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 		const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
-		const getLanguage = await utils.getLanguage(msg.from.language_code, msg.from.id, 'info');
+		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'info');
 
 		if(msgText.toLowerCase() === 'info') {
 			logger.log('notice', 'User %s Used Info Command(Get %s) in %s(%s)', `${username}(${msg.from.id})`, msg.reply_to_message ? msg.reply_to_message.message_id : msg.message_id, msg.chat.title, msg.chat.id);
