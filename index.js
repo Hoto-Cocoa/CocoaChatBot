@@ -5,6 +5,7 @@ const https = require('https');
 const Database = require('./modules/Database');
 const schoolMeal = require('./modules/SchoolMeal');
 const jsonQuery = require('json-query');
+const Language = require('./modules/Language');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -24,6 +25,7 @@ const logger = Logger.createLogger({
 });
 const telegramBot = new TelegramBot(Config.Telegram.Token, Config.Test ? { polling: { params: { timeout : 1 }}} : { polling: true });
 const database = new Database(Config.Database, logger);
+const language = new Language(database);
 
 require('./modules/CreateDatabase')(Config.Database, logger);
 
@@ -50,32 +52,13 @@ const rateLimit = {
 }
 rateLimit.init();
 
-var languages = [];
-require('fs').readdirSync(__dirname + '/languages/').forEach(function(file) {
-	languages[file.substring(0, file.length - 5)] = require(`${__dirname}/languages/${file}`);
-});
-async function getLanguage(langCode, userId, msgCategory) {
-	languageSetting = await database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
-	langCode = languageSetting ? languageSetting : langCode ? langCode.substring(0, 2) : 'en';
-	languageData = languages[langCode] ? languages[langCode] : languages['en'];
-	return (msgCode, ...args) => {
-		msg = languageData[msgCategory] ? languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : languages['en'][msgCategory] ? languages['en'][msgCategory][msgCode] ? languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : 'Error: Invalid Message Code';
-		return args ? require('util').format(msg, ...args) : msg;
-	}
-}
-async function getLanguageData(language, userId) {
-	languageSetting = await database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
-	language = languageSetting ? languageSetting : language ? language.substring(0, 2) : 'en';
-	return languages[language] ? languages[language] : languages['en'];
-}
-
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 });
 require('./commands/index')(telegramBot, logger, {
-	database, rateLimit, getLanguage, getLanguageData
+	database, rateLimit, getLanguage: language.getLanguage, getLanguageData: language.getLanguageData
 });
 
 telegramBot.on('callback_query', async msg => {
@@ -83,7 +66,7 @@ telegramBot.on('callback_query', async msg => {
 	const name = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 
 	if(data.action === 'MathMoreNumber') {
-		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'math'), languageData = await getLanguageData(msg.from.language_code, msg.from.id);
+		const getLanguage = await language.getLanguage(msg.from.language_code, msg.from.id, 'math'), languageData = await language.getLanguageData(msg.from.language_code, msg.from.id);
 		if(rateLimit.get('BtnMathMoreNumber', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
 			text: languageData.rateLimit
 		});
@@ -111,23 +94,23 @@ telegramBot.on('callback_query', async msg => {
 	}
 
 	if(data.action === 'VoteVoting') {
-		const getLanguage = await getLanguage(msg.from.language_code, msg.from.id, 'vote'), languageData = await getLanguageData(msg.from.language_code, msg.from.id);
+		const getLanguage = await language.getLanguage(msg.from.language_code, msg.from.id, 'vote'), languageData = await language.getLanguageData(msg.from.language_code, msg.from.id);
 		if(rateLimit.get('BtnVoteVoting', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
 			text: languageData.rateLimit
 		});
 		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
 		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
-			const voteData = JSON.parse(res[0].data);
-			if(res[0].closed) return telegramBot.answerCallbackQuery(msg.id, {
+			const voteData = JSON.parse(res.data);
+			if(res.closed) return telegramBot.answerCallbackQuery(msg.id, {
 				text: getLanguage('wasClosed')
 			});
-			if(res[0].deleted) return telegramBot.answerCallbackQuery(msg.id, {
+			if(res.deleted) return telegramBot.answerCallbackQuery(msg.id, {
 				text: getLanguage('wasDeleted')
 			});
 			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [ data.vote, msg.from.id ]).then(res2 => {
-				if(res2.length) {
-					database.query(`UPDATE voting SET active=0 WHERE id=?`, res2[0].id);
+				if(res2) {
+					database.query(`UPDATE voting SET active=0 WHERE id=?`, res2);
 				}
 				database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote).then(() => {
 					database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
@@ -151,7 +134,7 @@ telegramBot.on('callback_query', async msg => {
 									})
 								} ] );
 							}
-							telegramBot.editMessageText(`<b>${res[0].name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
+							telegramBot.editMessageText(`<b>${res.name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 						});
 					}
 					rateLimit.remove('BtnVoteVoting', msg.from.id);
@@ -166,7 +149,7 @@ telegramBot.on('callback_query', async msg => {
 	if(data.action === 'SchoolChoice') {
 		logger.log('notice', 'User %s Used School Choice Button(School %s, Type %s) in %s(%s)', `${name}(${msg.message.from.id})`, data.code, data.type, msg.message.chat.title, msg.message.chat.id);
 		schoolMeal.get(data.type, data.code, (err, res) => {
-			if(err) return (logger.log('error', e.stack) && bot.sendMessage(msg.chat.id, 'Error!', { reply_to_message_id: msg.message_id }));
+			if(err) return (logger.log('error', e.stack) && telegramBot.editMessageText('Error!', { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id });
 			return telegramBot.editMessageText(res, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id });
 		});
 	}
