@@ -6,6 +6,7 @@ const Database = require('./modules/Database');
 const schoolMeal = require('./modules/SchoolMeal');
 const jsonQuery = require('json-query');
 const Language = require('./modules/Language');
+const RateLimit = require('./modules/RateLimit');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -26,31 +27,9 @@ const logger = Logger.createLogger({
 const telegramBot = new TelegramBot(Config.Telegram.Token, Config.Test ? { polling: { params: { timeout : 1 }}} : { polling: true });
 const database = new Database(Config.Database, logger);
 const language = new Language(database);
+const rateLimit =  new RateLimit();
 
 require('./modules/CreateDatabase')(Config.Database, logger);
-
-const rateLimit = {
-	add: (type, userId, time) => {
-		if(!this.storage[type]) this.storage[type] = [];
-		this.storage[type][userId] = true;
-		if(time) setTimeout(() => {
-			this.storage[type][userId] = null;
-			delete this.storage[type][userId];
-		}, time);
-	},
-	get: (type, userId) => {
-		if(!this.storage[type]) this.storage[type] = [];
-		return this.storage[type][userId];
-	},
-	remove: (type, userId) => {
-		this.storage[type][userId] = null;
-		delete this.storage[type][userId];
-	},
-	init: () => {
-		this.storage = [];
-	}
-}
-rateLimit.init();
 
 telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
