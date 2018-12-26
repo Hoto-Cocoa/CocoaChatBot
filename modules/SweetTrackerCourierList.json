@@ -1,0 +1,171 @@
+
+{
+	"건영택배": {
+		"alias": ["건영"],
+		"code": "18"
+	},
+	"경동택배": {
+		"alias": ["경동"],
+		"code": "23"
+	},
+	"홈픽택배": {
+		"alias": ["홈픽"],
+		"code": "54"
+	},
+	"굿투럭": {
+		"alias": [],
+		"code": "40"
+	},
+	"농협택배": {
+		"alias": ["농협"],
+		"code": "53"
+	},
+	"대신택배": {
+		"alias": ["대신"],
+		"code": "22"
+	},
+	"로젠택배": {
+		"alias": ["로젠"],
+		"code": "06"
+	},
+	"롯데택배": {
+		"alias": ["롯데"],
+		"code": "08"
+	},
+	"세방": {
+		"alias": [],
+		"code": "52"
+	},
+	"애니트랙": {
+		"alias": [],
+		"code": "43"
+	},
+	"우체국택배": {
+		"alias": ["우체국"],
+		"code": "01"
+	},
+	"일양로지스": {
+		"alias": [],
+		"code": "11"
+	},
+	"천일택배": {
+		"alias": ["천일"],
+		"code": "17"
+	},
+	"한덱스": {
+		"alias": [],
+		"code": "20"
+	},
+	"한의사랑택배": {
+		"alias": ["한의사랑"],
+		"code": "16"
+	},
+	"한진택배": {
+		"alias": ["한진"],
+		"code": "05"
+	},
+	"합동택배": {
+		"alias": ["합동"],
+		"code": "32"
+	},
+	"호남택배": {
+		"alias": ["호남"],
+		"code": "45"
+	},
+	"CJ대한통운": {
+		"alias": ["CJ", "대한", "대한통운"],
+		"code": "04"
+	},
+	"CU편의점택배": {
+		"alias": ["CU", "CU편의점", "CU택배"],
+		"code": "46"
+	},
+	"CVSnet편의점택배": {
+		"alias": ["CVSnet"],
+		"code": "24"
+	},
+	"KGB택배": {
+		"alias": ["KGB"],
+		"code": "56"
+	},
+	"KGL네트웍스": {
+		"alias": [],
+		"code": "30"
+	},
+	"SLX": {
+		"alias": [],
+		"code": "44"
+	},
+	"하이택배": {
+		"alias": ["하이"],
+		"code": "58"
+	},		
+	"롯데글로벌로지스": {
+		"alias": ["롯데글로벌"],
+		"code": "99"
+	},
+	"범한판토스": {
+		"alias": [],
+		"code": "37"
+	},
+	"에어보이익스프레스": {
+		"alias": ["에어보이"],
+		"code": "29"
+	},
+	"APEX(ECMSExpress)": {
+		"alias": ["APEX", "ECMS"],
+		"code": "38"
+	},
+	"CJ대한통운국제특송": {
+		"alias": ["CJ국제", "대한국제", "대한통운국제", "CJ대한통운국제"],
+		"code": "42"
+	},
+	"CwayExpress": {
+		"alias": ["Cway"],
+		"code": "57"
+	},
+	"DHL": {
+		"alias": [],
+		"code": "13"
+	},
+	"DHLGlobalMail": {
+		"alias": ["DHL"],
+		"code": "33"
+	},
+	"EMS": {
+		"alias": [],
+		"code": "12"
+	},
+	"Fedex": {
+		"alias": [],
+		"code": "21"
+	},
+	"GSIExpress": {
+		"alias": ["GSI"],
+		"code": "41"
+	},
+	"GSMNtoN(인로스)": {
+		"alias": ["GSMNtoN", "인로스"],
+		"code": "28"
+	},
+	"i-Parcel": {
+		"alias": [],
+		"code": "34"
+	},
+	"TNTExpress": {
+		"alias": ["TNT"],
+		"code": "25"
+	},
+	"EuroParcel": {
+		"alias": ["유로택배"],
+		"code": "55"
+	},
+	"UPS": {
+		"alias": [],
+		"code": "14"
+	},
+	"USPS": {
+		"alias": [],
+		"code": "26"
+	}
+}
