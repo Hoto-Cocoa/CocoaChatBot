@@ -19,7 +19,7 @@ module.exports = (bot, logger, utils) => {
 			if(action === 'view') {
 				logger.log('notice', 'User %s Used Track Command(View %s) in %s(%s)', `${username}(${msg.from.id})`, msgArr.join(', '), msg.chat.title, msg.chat.id);
 				const result = await tracker.getTrackingInfo(msgArr[0], msgArr[1]);
-				if(result.code) return bot.sendMessage(msg.chat.id, getLanguage(`error${result.code}`, code, msg), { reply_to_message_id: msg.message_id });
+				if(result.status === false) return bot.sendMessage(msg.chat.id, getLanguage(`error${result.code}`, result.code, result.msg), { reply_to_message_id: msg.message_id });
 				const latestTrackingData = result.trackingDetails[result.trackingDetails.length - 1];
 				var toSendArr = [];
 				toSendArr.push(`<b>${getLanguage('latestTrackingInfo')}</b>`);
