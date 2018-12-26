@@ -115,7 +115,7 @@ const courierList = {
 		alias: ['CU', 'CU편의점', 'CU택배'],
 		code: '46'
 	},
-	'CVSnet 편의점택배': {
+	'CVSnet편의점택배': {
 		alias: ['CVSnet'],
 		code: '24'
 	},
@@ -135,8 +135,8 @@ const courierList = {
 		alias: ['하이'],
 		code: '58'
 	},		
-	'롯데글로벌 로지스': {
-		alias: [],
+	'롯데글로벌로지스': {
+		alias: ['롯데글로벌'],
 		code: '99'
 	},
 	'범한판토스': {
@@ -144,27 +144,27 @@ const courierList = {
 		code: '37'
 	},
 	'에어보이익스프레스': {
-		alias: [],
+		alias: ['에어보이'],
 		code: '29'
 	},
-	'APEX(ECMS Express)': {
-		alias: [],
+	'APEX(ECMSExpress)': {
+		alias: ['APEX', 'ECMS'],
 		code: '38'
 	},
-	'CJ대한통운 국제특송': {
-		alias: [],
+	'CJ대한통운국제특송': {
+		alias: ['CJ국제', '대한국제', '대한통운국제', 'CJ대한통운국제'],
 		code: '42'
 	},
-	'Cway Express': {
-		alias: [],
+	'CwayExpress': {
+		alias: ['Cway'],
 		code: '57'
 	},
 	'DHL': {
 		alias: [],
 		code: '13'
 	},
-	'DHL Global Mail': {
-		alias: [],
+	'DHLGlobalMail': {
+		alias: ['DHL'],
 		code: '33'
 	},
 	'EMS': {
@@ -175,20 +175,20 @@ const courierList = {
 		alias: [],
 		code: '21'
 	},
-	'GSI Express': {
-		alias: [],
+	'GSIExpress': {
+		alias: ['GSI'],
 		code: '41'
 	},
 	'GSMNtoN(인로스)': {
-		alias: [],
+		alias: ['GSMNtoN', '인로스'],
 		code: '28'
 	},
 	'i-Parcel': {
 		alias: [],
 		code: '34'
 	},
-	'TNT Express': {
-		alias: [],
+	'TNTExpress': {
+		alias: ['TNT'],
 		code: '25'
 	},
 	'EuroParcel': {
