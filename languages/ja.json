@@ -16,7 +16,7 @@
     },
     "get": {
         "result": "%s 番目のメッセージです！",
-        "noResult": "%s 度メッセージを見つけることができません！",
+        "noResult": "%s 番目のメッセージは見つかりませんでした!",
         "wrongNumber": "間違った番号です！"
     },
     "math": {
@@ -26,7 +26,13 @@
     },
     "school": {
         "choice": "照会する学校を選択してください。",
-        "tooManyResults": "%d 個の学校を検索し、10個まで表示した結果です。正確な結果を見るには学校名を、より具体的に入力してください。"
+        "tooManyResults": "%d 個の学校を検索し、10個まで表示した結果です。正確な結果を見るには学校名を、より具体的に入力してください。",
+        "tooShortName": "名前がとても短いです！",
+        "sslError": "韓国教育部のサーバーに接続中にSSLエラーが発生しました。",
+        "noSuchDepartment": "この地域は支援しません。次のような地域を支援します。：%s",
+        "noSuchSchool": "この学校は支援しません。",
+        "error": "エラー！",
+        "departments": "Seoul, Busan, Daegu, Incheon, Gwangju, Daejeon, Ulsan, Sejong, Gyeonggi, Gngwon, Chungbuk, Chungnam, Jeonbuk, Jeonnam, Gyeongbuk, Gyeongnam, Jeju"
     },
     "source": {
         "viewOn": "%s で見る",
@@ -71,12 +77,12 @@
             "value": "@CocoaCafe"
         },
         "setting": {
-            "title": "",
-            "value": ""
+            "title": "キー値を設定",
+            "value": "個人設定を変更"
         },
         "track": {
-            "title": "",
-            "value": ""
+            "title": "track［list｜view (宅配便会社) (伝票番号)］",
+            "value": "配送状況を確認する"
         }
     },
     "setting": {
@@ -97,18 +103,18 @@
         "debug": "ディバーグ"
     },
     "track": {
-        "list": "",
-        "error101": "",
-        "error102": "",
-        "error103": "",
-        "error104": "",
-        "error105": "",
-        "error106": "",
-        "error404": "",
-        "error500": "",
-        "latestTrackingInfo": "",
-        "time": "",
-        "where": "",
-        "kind": ""
+        "list": "配達状況を確認できる宅配会社: %s",
+        "error101": "そのようなキーは発行されていませんでした！（管理者に問い合わせてください）",
+        "error102": "キーが期限切れになりました！（管理者に問い合わせてください）",
+        "error103": "キーの制限を超えました！（管理者に問い合わせてください）",
+        "error104": "間違った伝票番号です！",
+        "error105": "この伝票番号は照会可能限度(20日)を超過しました。明日またコマンドを使用してください。",
+        "error106": "APIサーバで伝票番号を照会中にエラーが発生しました。",
+        "error404": "Not Found: 案内するコードとメッセージを確認してください。（コード：\"%s\"、メッセージ：\"%s\"）",
+        "error500": "APIサーバで内部エラーが発生しました。",
+        "latestTrackingInfo": "最近の配送状況",
+        "time": "時間",
+        "where": "場所",
+        "kind": "情報"
     }
 }
