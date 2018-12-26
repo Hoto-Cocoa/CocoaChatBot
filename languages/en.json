@@ -26,7 +26,13 @@
 	},
 	"school": {
 		"choice": "Choice your school.",
-		"tooManyResults": "%d schools were searched and only 10 schools were sent. Please specify your school name more."
+		"tooManyResults": "%d schools were searched and only 10 schools were sent. Please specify your school name more.",
+		"tooShortName": "Too short name!",
+		"sslError": "SSL Error occurred while connecting to Ministry of Education Meal Server.",
+		"noSuchDepartment": "No such department! The following departments are available: %s",
+		"noSuchSchool": "No such school!",
+		"error": "Error!",
+		"departments": "Seoul, Busan, Daegu, Incheon, Gwangju, Daejeon, Ulsan, Sejong, Gyeonggi, Gangwon, Chungbuk, Chungnam, Jeonbuk, Jeonnam, Gyeongbuk, Gyeongnam, Jeju"
 	},
 	"source": {
 		"viewOn": "View on %s",
