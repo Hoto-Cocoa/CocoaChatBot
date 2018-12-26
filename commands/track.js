@@ -23,7 +23,7 @@ module.exports = (bot, logger, utils) => {
 				const latestTrackingData = result.trackingDetails[result.trackingDetails.length - 1];
 				var toSendArr = [];
 				toSendArr.push(`<b>${getLanguage('latestTrackingInfo')}</b>`);
-				toSendArr.push(`<b>${getLanguage('time')}</b>: ${latestTrackingData.time}`);
+				toSendArr.push(`<b>${getLanguage('time')}</b>: ${latestTrackingData.timeString}`);
 				toSendArr.push(`<b>${getLanguage('where')}</b>: ${latestTrackingData.where}`);
 				toSendArr.push(`<b>${getLanguage('kind')}</b>: ${latestTrackingData.kind}`);
 				return bot.sendMessage(msg.chat.id, toSendArr.join('\n'), { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
