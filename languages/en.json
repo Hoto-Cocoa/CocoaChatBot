@@ -60,7 +60,7 @@
 		},
 		"get": {
 			"title": "get id",
-			"value": "Get Message of id"
+			"value": "Get Message of ID"
 		},
 		"help": {
 			"title": "help",
@@ -69,6 +69,14 @@
 		"support": {
 			"title": "Support Chat (ko-KR)",
 			"value": "@CocoaCafe"
+		},
+		"setting": {
+			"title": "setting key value",
+			"value": "Change Personal Setting"
+		},
+		"track": {
+			"title": "track [list|view courier waybillNumber]",
+			"value": "Track Delivery"
 		}
 	},
 	"setting": {
