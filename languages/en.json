@@ -106,7 +106,7 @@
 		"error106": "Error while lookup waybill number at API Server.",
 		"error404": "Not Found: Please check code and msg. (code: \"%s\", msg: \"%s\")",
 		"error500": "Internal Server Error at API Server.",
-		"latestTrackingInfo": "Latest Trackig Info",
+		"latestTrackingInfo": "Latest Tracking Info",
 		"time": "Time",
 		"where": "Location",
 		"kind": "Info"
