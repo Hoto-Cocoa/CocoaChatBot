@@ -18,15 +18,9 @@ const asyncRequest = async function(uri, headers, method, data) {
 		const req = require(uri.protocol.substring(0, uri.protocol.length - 1)).request(postOptions, function(res) {
 			var data = '';
 			res.setEncoding('utf8');
-			res.on('data', function(resData) {
-				data += resData;
-			});
-			res.on('end', function() {
-				resolve(data);
-			});
-			res.on('error', function(error) {
-				reject(error);
-			});
+			res.on('data', resData => data += resData);
+			res.on('end', () => resolve(data));
+			res.on('error', error => reject(error));
 		});
 
 		data && req.write(data);
