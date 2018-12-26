@@ -15,14 +15,14 @@
         "recorded": "投票が記録された。"
     },
     "get": {
-        "result": "%s 番メッセージです！",
+        "result": "%s 番目のメッセージです！",
         "noResult": "%s 度メッセージを見つけることができません！",
         "wrongNumber": "間違った番号です！"
     },
     "math": {
         "wrongInput": "間違った入力です！",
         "more": "もっと見る",
-        "banned": "結果を表示できません。"
+        "banned": "結果を表示することができない式です。"
     },
     "school": {
         "choice": "照会する学校を選択してください。",
@@ -35,11 +35,11 @@
     },
     "help": {
         "search": {
-            "title": "//Search",
+            "title": "//[キーワード入力]",
             "value": "ウェブ検索"
         },
         "math": {
-            "title": "=Expression",
+            "title": "=[式の入力]",
             "value": "式を計算する"
         },
         "source": {
@@ -69,6 +69,46 @@
         "support": {
             "title": "サポート（韓国語）",
             "value": "@CocoaCafe"
+        },
+        "setting": {
+            "title": "",
+            "value": ""
+        },
+        "track": {
+            "title": "",
+            "value": ""
         }
+    },
+    "setting": {
+        "done": "設定を保存しました。"
+    },
+    "info": {
+        "messageId": "メッセージID",
+        "date": "日付",
+        "userId": "ユーザーID",
+        "userIsBot": "ボットですか?",
+        "userFirstName": "名前",
+        "userLastName": "名字",
+        "userUsername": "ユーザー名",
+        "userLanguageCode": "言語コード",
+        "chatId": "グループID",
+        "chatTitle": "グループタイトル",
+        "chatType": "グループタイプ",
+        "debug": "ディバーグ"
+    },
+    "track": {
+        "list": "",
+        "error101": "",
+        "error102": "",
+        "error103": "",
+        "error104": "",
+        "error105": "",
+        "error106": "",
+        "error404": "",
+        "error500": "",
+        "latestTrackingInfo": "",
+        "time": "",
+        "where": "",
+        "kind": ""
     }
 }

@@ -69,9 +69,46 @@
         "support": {
             "title": "지원 채팅방 (한국어)",
             "value": "@CocoaCafe"
+        },
+        "setting": {
+            "title": "",
+            "value": ""
+        },
+        "track": {
+            "title": "",
+            "value": ""
         }
     },
     "setting": {
         "done": "설정이 기록되었습니다."
+    },
+    "info": {
+        "messageId": "메시지 고유 번호",
+        "date": "날짜",
+        "userId": "사용자 고유 번호",
+        "userIsBot": "봇 여부",
+        "userFirstName": "성",
+        "userLastName": "이름",
+        "userUsername": "사용자명",
+        "userLanguageCode": "언어 코드",
+        "chatId": "채팅방 고유 번호",
+        "chatTitle": "채팅방 이름",
+        "chatType": "채팅방 유형",
+        "debug": "디버그"
+    },
+    "track": {
+        "list": "",
+        "error101": "",
+        "error102": "",
+        "error103": "",
+        "error104": "",
+        "error105": "",
+        "error106": "",
+        "error404": "",
+        "error500": "",
+        "latestTrackingInfo": "",
+        "time": "",
+        "where": "",
+        "kind": ""
     }
 }
