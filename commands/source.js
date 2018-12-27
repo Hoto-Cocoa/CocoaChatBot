@@ -1,7 +1,6 @@
 const Sauce = require('sagiri');
 const sauce = new Sauce(require('../config').SauceNAO.Token);
 const tmpDir = require('os').tmpdir();
-const util = require('util');
 
 module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {

@@ -1,4 +1,3 @@
-const jsonQuery = require('json-query');
 const tracker = new (require('../modules/SweetTracker'))(require('../config').Track.Token);
 
 module.exports = (telegram, logger, utils) => {

@@ -1,5 +1,4 @@
 const jsonQuery = require('json-query');
-const util = require('util');
 
 module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
