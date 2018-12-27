@@ -16,8 +16,8 @@ module.exports = (telegram, logger, utils) => {
 				if(![ 'public', 'anonymous', 'counter' ].includes(type = msgArr.shift().toLowerCase())) {
 					return telegram.bot.sendMessage(msg.chat.id, getLanguage('wrongType', type), { reply_to_message_id: msg.message_id });
 				}
-				const res = await utils.database.query('INSERT INTO vote(date, groupId, userId, msg.from.parsed_username, name, data) VALUES(?, ?, ?, ?, ?, ?);', [
-					Date.now(), msg.chat.id, msg.from.id, msg.from.parsed_username, name, JSON.stringify({
+				const res = await utils.database.query('INSERT INTO vote(date, groupId, userId, username, name, data) VALUES(?, ?, ?, ?, ?, ?);', [
+					Date.now(), msg.chat.id, msg.from.id, username, name, JSON.stringify({
 						type: type,
 						selections: msgArr
 					})
@@ -28,12 +28,12 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'view') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(View %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT msg.from.parsed_username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('wasDeleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
 				let selections = [], inlineBtnArr = [];
 				for(let i = 0; i < voteData.data.selections.length; i++) {
-					let q = jsonQuery(`[**][*value=${i}].msg.from.parsed_username`, { data: { data: votingData }}).value;
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 					inlineBtnArr.push( [ {
 						text: voteData.data.selections[i],
@@ -74,13 +74,13 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'result') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Result %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT msg.from.parsed_username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
 				if(parseInt(voteData.groupId) !== msg.chat.id) return telegram.bot.sendMessage(msg.chat.id, getLanguage('notThisChat'), { reply_to_message_id: msg.message_id });
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('deleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
 				let selections = [];
 				for(let i = 0; i < voteData.data.selections.length; i++) {
-					let q = jsonQuery(`[**][*value=${i}].msg.from.parsed_username`, { data: { data: votingData }}).value;
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 				}
 				return telegram.bot.sendMessage(msg.chat.id, `<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
@@ -89,13 +89,13 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'aresult') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(AResult %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT msg.from.parsed_username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
 				if(parseInt(voteData.groupId) !== msg.chat.id) return telegram.bot.sendMessage(msg.chat.id, getLanguage('notThisChat'), { reply_to_message_id: msg.message_id });
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('wasDeleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
 				let selections = [];
 				for(let i = 0; i < voteData.data.selections.length; i++) {
-					let q = jsonQuery(`[**][*value=${i}].msg.from.parsed_username`, { data: { data: votingData }}).value;
+					let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: votingData }}).value;
 					selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length ? `(${q.join(', ')})` : ''}`);
 				}
 				return telegram.bot.sendMessage(msg.chat.id, `<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { parse_mode: 'HTML', reply_to_message_id: msg.message_id });
