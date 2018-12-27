@@ -32,7 +32,7 @@
         "noSuchDepartment": "この地域は支援しません。次のような地域を支援します。：%s",
         "noSuchSchool": "この学校は支援しません。",
         "error": "エラー！",
-        "departments": "Seoul, Busan, Daegu, Incheon, Gwangju, Daejeon, Ulsan, Sejong, Gyeonggi, Gngwon, Chungbuk, Chungnam, Jeonbuk, Jeonnam, Gyeongbuk, Gyeongnam, Jeju"
+        "departments": "ソウル特別市(Seoul), 釜山広域市(Busan), 大邱広域市(Daegu), 仁川広域市(Incheon), 光州広域市(Gwangju), 大田広域市(Daejeon), 蔚山広域市(Ulsan), 世宗特別自治市(Sejong), 京畿道(Gyeonggi), 江原道(Gangwon), 忠清北道(Chungbuk), 忠清南道(Chungnam), 全羅北道(Jeonbuk), 全羅南道(Jeonnam), 慶尚北道(Gyeongbuk), 慶尚南道(Gyeongnam), 済州特別自治道(Jeju)"
     },
     "source": {
         "viewOn": "%s で見る",
@@ -115,6 +115,14 @@
         "latestTrackingInfo": "最近の配送状況",
         "time": "時間",
         "where": "場所",
-        "kind": "情報"
+        "deliveryInfo": "配送情報",
+        "itemName": "配送物品",
+        "deliveryStatus": "配送状況",
+        "status1": "配送待機中",
+        "status2": "配送物品分類中",
+        "status3": "配送物品準備中",
+        "status4": "配送準備中",
+        "status5": "配送開始",
+        "status6": "配送完了"
     }
 }

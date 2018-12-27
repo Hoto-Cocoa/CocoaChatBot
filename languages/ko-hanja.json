@@ -115,6 +115,14 @@
         "latestTrackingInfo": "마지막 追跡 情報",
         "time": "時間",
         "where": "位置",
-        "kind": "狀態"
+        "deliveryInfo": "配送 情報",
+        "itemName": "商品名",
+        "deliveryStatus": "狀態",
+        "status1": "配送 準備中",
+        "status2": "集貨 完了",
+        "status3": "配送中",
+        "status4": "地點 到着",
+        "status5": "配送 出發",
+        "status6": "配送 完了"
     }
 }
