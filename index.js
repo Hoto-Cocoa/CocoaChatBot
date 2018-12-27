@@ -8,6 +8,7 @@ const jsonQuery = require('json-query');
 const Language = require('./modules/Language');
 const RateLimit = require('./modules/RateLimit');
 const Events = require('events');
+const asyncRequest = require('./modules/AsyncRequest');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -67,25 +68,16 @@ telegramBot.on('callback_query', async msg => {
 		});
 		rateLimit.add('BtnMathMoreNumber', msg.from.id, 5000);
 		const expression = msg.message.reply_to_message.text.substring(1, msg.message.reply_to_message.text.length);
-		logger.log('notice', 'User %s Used Math More Button(Calculate %s, More Number %s) in %s(%s)', `${name}(${msg.message.from.id})`, expression, data.value, msg.message.chat.title, msg.message.chat.id);
-		https.get(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`, res => {
-			var json = '';
-			res.on('data', data => {
-				json += data;
-			});
-			res.on('end', () => {
-				json = JSON.parse(json);
-				const value = json.queryresult.pods[0].subpods[0].plaintext;
-				var options = { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id };
-				if(data.value < 10 && json.queryresult.pods[0].states && (json.queryresult.pods[0].states[0].name === 'More digits' || json.queryresult.pods[0].states.length > 1)) options = Object.assign({
-					reply_markup: { inline_keyboard: [ [ {
-						text: getLanguage('more'),
-						callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
-					} ] ] }
-				}, options);
-				return telegramBot.editMessageText(value, options);
-			});
-		});
+		const result = JSON.parse(await asyncRequest(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(expression)}&primary=true&appid=${Config.Wolfram.Token}&podstate=${data.value}@Result__More+digits&podstate=${data.value}@DecimalApproximation__More+digits&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`));
+		const value = result.queryresult.pods[0].subpods[0].plaintext;
+		var options = { chat_id: msg.message.chat.id, message_id: msg.message.message_id, reply_to_message_id: msg.message.reply_to_message.message_id };
+		if(data.value < 10 && result.queryresult.pods[0].states && (result.queryresult.pods[0].states[0].name === 'More digits' || result.queryresult.pods[0].states.length > 1)) options = Object.assign({
+			reply_markup: { inline_keyboard: [ [ {
+				text: getLanguage('more'),
+				callback_data: JSON.stringify({ action: 'MathMoreNumber', value: data.value + 1 })
+			} ] ] }
+		}, options);
+		return telegramBot.editMessageText(value, options);
 	}
 
 	if(data.action === 'VoteVoting') {
