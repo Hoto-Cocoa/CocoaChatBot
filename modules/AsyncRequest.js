@@ -1,4 +1,4 @@
-module.exports = async function(uri, headers, method, data) {
+module.exports = (uri, headers, method, data) => {
 	return new Promise((resolve, reject) => {
 		uri = require('url').parse(uri);
 		headers = headers ? headers : {};
