@@ -9,7 +9,9 @@ module.exports = (config, logger) => {
 			acquire: 30000,
 			idle: 10000
 		},
-		logging: sequelizeLogger
+		logging: (msg) => {
+			logger.log('debug', 'Sequelize Executed "%s"', msg);
+		}
 	});
 	const queryInterface = sequelize.getQueryInterface();
 
@@ -121,8 +123,4 @@ module.exports = (config, logger) => {
 			defaultValue: true
 		}
 	});
-	
-	function sequelizeLogger(msg) {
-		logger.log('debug', 'Sequelize Executed "%s"', msg);
-	}
 }
