@@ -35,7 +35,7 @@
         "departments": "서울, 부산, 대구, 인천, 광주, 대전, 울산, 세종, 경기, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주"
     },
     "source": {
-        "viewOn": "%s 에서 보기",
+        "viewOn": "%s에서 보기",
         "similarity": "유사도",
         "noPhoto": "사진을 찾을 수 없습니다!"
     },
@@ -115,6 +115,14 @@
         "latestTrackingInfo": "마지막 추적 정보",
         "time": "시간",
         "where": "위치",
-        "kind": "상태"
+        "deliveryInfo": "배송 정보",
+        "itemName": "상품 이름",
+        "deliveryStatus": "상태",
+        "status1": "배송 준비 중",
+        "status2": "집화 완료",
+        "status3": "배송 중",
+        "status4": "지점 도착",
+        "status5": "배송 출발",
+        "status6": "배송 완료"
     }
 }

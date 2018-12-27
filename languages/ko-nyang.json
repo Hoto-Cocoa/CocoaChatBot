@@ -26,7 +26,13 @@
     },
     "school": {
         "choice": "학교를 선택하라냥.",
-        "tooManyResults": "%d개의 학교나 검색돼서 10개의 학교만 보냈다냥. 더 정확히 말해달라냥."
+        "tooManyResults": "%d개의 학교나 검색돼서 10개의 학교만 보냈다냥. 더 정확히 말해달라냥.",
+        "tooShortName": "이름이 너무 짧다냥!",
+        "sslError": "행정 구역의 급식 서버에 접근하는 도중 SSL 오류가 발생했다냥.",
+        "noSuchDepartment": "행정 구역을 찾을 수 없다냥! 다음 행정 구역을 지원한다냥: %s",
+        "noSuchSchool": "학교를 찾을 수 없다냥!",
+        "error": "오류!",
+        "departments": "서울, 부산, 대구, 인천, 광주, 대전, 울산, 세종, 경기, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주"
     },
     "source": {
         "viewOn": "%s에서 보기",
@@ -109,6 +115,14 @@
         "latestTrackingInfo": "마지막 추적 정보",
         "time": "시간",
         "where": "위치",
-        "kind": "정보"
+        "deliveryInfo": "배송 정보",
+        "itemName": "상품 이름",
+        "deliveryStatus": "상태",
+        "status1": "배송 준비 중",
+        "status2": "집화 완료",
+        "status3": "배송 중",
+        "status4": "지점 도착",
+        "status5": "배송 출발",
+        "status6": "배송 완료"
     }
 }

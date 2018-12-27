@@ -115,6 +115,14 @@
         "latestTrackingInfo": "마지막 트랙 정보",
         "time": "시간",
         "where": "위치",
-        "kind": "상태"
+        "deliveryInfo": "선박 공지 사항",
+        "itemName": "제품 이름",
+        "deliveryStatus": "주",
+        "status1": "배송 준비하기",
+        "status2": "지풍 완료",
+        "status3": "선박 의",
+        "status4": "대행사에 도착",
+        "status5": "납품 출발",
+        "status6": "납품 전체"
     }
 }

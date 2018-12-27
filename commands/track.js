@@ -22,10 +22,13 @@ module.exports = (bot, logger, utils) => {
 				if(result.status === false) return bot.sendMessage(msg.chat.id, (result.code === 404) ? getLanguage(`error${result.code}`, result.code, result.msg) : getLanguage(`error${result.code}`), { reply_to_message_id: msg.message_id });
 				const latestTrackingData = result.trackingDetails[result.trackingDetails.length - 1];
 				var toSendArr = [];
+				toSendArr.push(`<b>${getLanguage('deliveryInfo')}</b>`);
+				result.itemName && toSendArr.push(`<b>${getLanguage('itemName')}</b>: ${result.itemName}`);
+				toSendArr.push(`<b>${getLanguage('deliveryStatus')}</b>: ${getLanguage(`status${result.level}`)}`);
+				toSendArr.push('');
 				toSendArr.push(`<b>${getLanguage('latestTrackingInfo')}</b>`);
 				toSendArr.push(`<b>${getLanguage('time')}</b>: ${latestTrackingData.timeString}`);
 				toSendArr.push(`<b>${getLanguage('where')}</b>: ${latestTrackingData.where}`);
-				toSendArr.push(`<b>${getLanguage('kind')}</b>: ${latestTrackingData.kind}`);
 				return bot.sendMessage(msg.chat.id, toSendArr.join('\n'), { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
 			}
 		}

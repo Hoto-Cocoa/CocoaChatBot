@@ -115,6 +115,14 @@
 		"latestTrackingInfo": "Latest Tracking Info",
 		"time": "Time",
 		"where": "Location",
-		"kind": "Info"
+		"deliveryInfo": "Delivery Info",
+		"itemName": "Item Name",
+		"deliveryStatus": "Status",
+		"status1": "Waiting for Delivery",
+		"status2": "Collected",
+		"status3": "Delivering",
+		"status4": "Arrival at Branch",
+		"status5": "Started Delivery",
+		"status6": "Complete Delivery"
 	}
 }
