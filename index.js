@@ -22,6 +22,14 @@ const logger = Logger.createLogger({
 		new Logger.transports.File({	
 			filename: 'debug.log',
 			level: 'debug'
+		}),
+		new Logger.transports.File({	
+			filename: 'notice.log',
+			level: 'notice'
+		}),
+		new Logger.transports.File({	
+			filename: 'error.log',
+			level: 'error'
 		})
 	]
 });
