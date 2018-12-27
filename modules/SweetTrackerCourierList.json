@@ -89,7 +89,7 @@
 		"code": "56"
 	},
 	"KGL네트웍스": {
-		"alias": [],
+		"alias": ["KGL"],
 		"code": "30"
 	},
 	"SLX": {
@@ -129,7 +129,7 @@
 		"code": "13"
 	},
 	"DHLGlobalMail": {
-		"alias": ["DHL"],
+		"alias": [],
 		"code": "33"
 	},
 	"EMS": {
