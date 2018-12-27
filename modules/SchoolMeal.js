@@ -7,7 +7,7 @@ module.exports = class SchoolMeal {
 			if(name.length < 2) reject('SHORT_NAME')
 			schoolApi.find(location, name, (err, res) => {
 				if(err) {
-					if(err.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE') return reject('SSL_CERTIFICATE_ERROR');
+					if(err.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' || err.message.startsWith('Hostname/IP doesn\'t match certificate\'s altnames')) return reject('SSL_CERTIFICATE_ERROR');
 					if(err.message.startsWith('No such department')) return reject('NO_SUCH_DEPARTMENT');
 					return reject(err);
 				}
