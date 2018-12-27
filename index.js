@@ -90,14 +90,10 @@ telegramBot.on('callback_query', async msg => {
 		var voteData = await database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote);
 		const votingId = await database.query('SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1', [ data.vote, msg.from.id ]);
 		voteData.data = JSON.parse(voteData.data);
-		if(voteData.closed) return telegramBot.answerCallbackQuery(msg.id, {
-			text: getLanguage('wasClosed')
-		});
-		if(voteData.deleted) return telegramBot.answerCallbackQuery(msg.id, {
-			text: getLanguage('wasDeleted')
-		});
+		if(voteData.closed) return telegramBot.answerCallbackQuery(msg.id, { text: getLanguage('wasClosed')});
+		if(voteData.deleted) return telegramBot.answerCallbackQuery(msg.id, { text: getLanguage('wasDeleted')});
 		if(votingId) database.query('UPDATE voting SET active=0 WHERE id=?', votingId);
-		database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote)
+		database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote);
 		database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
 			Date.now(), data.vote, msg.from.id, name, data.value
 		]).then(() => {
