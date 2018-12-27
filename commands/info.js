@@ -10,7 +10,7 @@ module.exports = (telegram, logger, utils) => {
 			toSendArr.push(`<b>${getLanguage('date')}</b>: ${msgData.date}`);``
 			toSendArr.push('');
 			toSendArr.push(`<b>${getLanguage('userId')}</b>: ${msgData.from.id}`);
-			toSendArr.push(`<b>${getLanguage('userIsBot')}</b>: ${msgData.from.is_telegram.bot}`);
+			toSendArr.push(`<b>${getLanguage('userIsBot')}</b>: ${msgData.from.is_bot}`);
 			toSendArr.push(`<b>${getLanguage('userFirstName')}</b>: ${msgData.from.first_name}`);
 			if(msgData.from.last_name) toSendArr.push(`<b>${getLanguage('userLastName')}</b>: ${msgData.from.last_name}`);
 			if(msgData.from.username) toSendArr.push(`<b>${getLanguage('userUsername')}</b>: ${msgData.from.username}`);
