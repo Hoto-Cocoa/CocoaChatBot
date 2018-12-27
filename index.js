@@ -87,48 +87,44 @@ telegramBot.on('callback_query', async msg => {
 		});
 		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
-		database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote).then(res => {
-			const voteData = JSON.parse(res.data);
-			if(res.closed) return telegramBot.answerCallbackQuery(msg.id, {
-				text: getLanguage('wasClosed')
-			});
-			if(res.deleted) return telegramBot.answerCallbackQuery(msg.id, {
-				text: getLanguage('wasDeleted')
-			});
-			database.query(`SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1`, [ data.vote, msg.from.id ]).then(res2 => {
-				if(res2) {
-					database.query(`UPDATE voting SET active=0 WHERE id=?`, res2);
-				}
-				database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote).then(() => {
-					database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
-						Date.now(), data.vote, msg.from.id, name, data.value
-					]);
-					if(voteData.type === 'public' || voteData.type === 'counter') {
-						database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
-							let selections = [];
-							for(let i = 0; i < voteData.selections.length; i++) {
-								let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
-								selections.push(`<b>${voteData.selections[i]}</b>: ${q.length}${q.length && voteData.type === 'public' ? `(${q.join(', ')})` : ''}`);
-							}
-							let inlineBtnArr = [];
-							for(let i = 0; i < voteData.selections.length; i++) {
-								inlineBtnArr.push( [ {
-									text: voteData.selections[i],
-									callback_data: JSON.stringify({
-										action: 'VoteVoting',
-										vote: data.vote,
-										value: i
-									})
-								} ] );
-							}
-							telegramBot.editMessageText(`<b>${res.name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
-						});
+		var voteData = await database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote);
+		const votingId = await database.query('SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1', [ data.vote, msg.from.id ]);
+		voteData.data = JSON.parse(voteData.data);
+		if(voteData.closed) return telegramBot.answerCallbackQuery(msg.id, {
+			text: getLanguage('wasClosed')
+		});
+		if(voteData.deleted) return telegramBot.answerCallbackQuery(msg.id, {
+			text: getLanguage('wasDeleted')
+		});
+		if(votingId) database.query('UPDATE voting SET active=0 WHERE id=?', votingId);
+		database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote)
+		database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
+			Date.now(), data.vote, msg.from.id, name, data.value
+		]).then(() => {
+			if(voteData.data.type === 'public' || voteData.data.type === 'counter') {
+				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
+					let selections = [];
+					for(let i = 0; i < voteData.data.selections.length; i++) {
+						let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
+						selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 					}
-					rateLimit.remove('BtnVoteVoting', msg.from.id);
-					return telegramBot.answerCallbackQuery(msg.id, {
-						text: getLanguage('recorded')
-					});
+					let inlineBtnArr = [];
+					for(let i = 0; i < voteData.data.selections.length; i++) {
+						inlineBtnArr.push( [ {
+							text: voteData.data.selections[i],
+							callback_data: JSON.stringify({
+								action: 'VoteVoting',
+								vote: data.vote,
+								value: i
+							})
+						} ] );
+					}
+					telegramBot.editMessageText(`<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				});
+			}
+			rateLimit.remove('BtnVoteVoting', msg.from.id);
+			return telegramBot.answerCallbackQuery(msg.id, {
+				text: getLanguage('recorded')
 			});
 		});
 	}
