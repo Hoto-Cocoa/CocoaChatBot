@@ -7,6 +7,7 @@ const SchoolMeal = require('./modules/SchoolMeal');
 const jsonQuery = require('json-query');
 const Language = require('./modules/Language');
 const RateLimit = require('./modules/RateLimit');
+const Events = require('events');
 
 const logger = Logger.createLogger({
 	format: Logger.format.combine(
@@ -29,6 +30,7 @@ const database = new Database(Config.Database, logger);
 const language = new Language(database);
 const rateLimit =  new RateLimit();
 const schoolMeal = new SchoolMeal();
+const telegramEvents = new Events();
 
 require('./modules/CreateDatabase')(Config.Database, logger);
 
@@ -36,10 +38,14 @@ telegramBot.on('message', msg => {
 	const msgText = msg.text ? msg.text : msg.caption ? msg.caption : '';
 	const username = msg.from.username ? `@${msg.from.username}` : msg.from.last_name ? `${msg.from.first_name} ${msg.from.last_name}` : msg.from.first_name;
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
+	if(msgText.startsWith(Config.Telegram.Prefix ? Config.Telegram.Prefix : '')) {
+		if(msg.text) msg.text = msg.text.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0);
+		if(msg.caption) msg.text = msg.caption.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0) && delete msg.caption;
+		msg.from.parsed_username = username;
+		telegramEvents.emit('message', msg);
+	}
 });
-require('./commands/index')(telegramBot, logger, {
-	database, rateLimit, language
-});
+require('./commands/index')({ bot: telegramBot, events: telegramEvents }, logger, { database, rateLimit, language });
 
 telegramBot.on('callback_query', async msg => {
 	const data = JSON.parse(msg.data);
