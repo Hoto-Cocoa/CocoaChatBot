@@ -124,5 +124,8 @@
 		"status4": "Arrival at Branch",
 		"status5": "Started Delivery",
 		"status6": "Complete Delivery"
+	},
+	"search": {
+		"noResult": "Cannot find any result!"
 	}
 }
