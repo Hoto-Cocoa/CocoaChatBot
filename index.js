@@ -98,10 +98,10 @@ telegramBot.on('callback_query', async msg => {
 			Date.now(), data.vote, msg.from.id, name, data.value
 		]).then(() => {
 			if(voteData.data.type === 'public' || voteData.data.type === 'counter') {
-				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res3 => {
+				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res => {
 					let selections = [];
 					for(let i = 0; i < voteData.data.selections.length; i++) {
-						let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res3 }}).value;
+						let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res }}).value;
 						selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 					}
 					let inlineBtnArr = [];

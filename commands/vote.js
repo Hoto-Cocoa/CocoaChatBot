@@ -17,7 +17,7 @@ module.exports = (telegram, logger, utils) => {
 					return telegram.bot.sendMessage(msg.chat.id, getLanguage('wrongType', type), { reply_to_message_id: msg.message_id });
 				}
 				const res = await utils.database.query('INSERT INTO vote(date, groupId, userId, username, name, data) VALUES(?, ?, ?, ?, ?, ?);', [
-					Date.now(), msg.chat.id, msg.from.id, username, name, JSON.stringify({
+					Date.now(), msg.chat.id, msg.from.id, msg.from.parsed_username, name, JSON.stringify({
 						type: type,
 						selections: msgArr
 					})
