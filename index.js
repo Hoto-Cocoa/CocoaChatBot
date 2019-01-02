@@ -82,10 +82,6 @@ telegramBot.on('callback_query', async msg => {
 
 	if(data.action === 'VoteVoting') {
 		const getLanguage = await language.getLanguage(msg.from.language_code, msg.from.id, 'vote'), languageData = await language.getLanguageData(msg.from.language_code, msg.from.id);
-		if(rateLimit.get('BtnVoteVoting', msg.from.id)) return telegramBot.answerCallbackQuery(msg.id, {
-			text: languageData.rateLimit
-		});
-		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
 		var voteData = await database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote);
 		voteData.data = JSON.parse(voteData.data);
@@ -115,7 +111,6 @@ telegramBot.on('callback_query', async msg => {
 					telegramBot.editMessageText(`<b>${voteData.name}</b>\n\n${selections.join('\n')}`, { chat_id: msg.message.chat.id, message_id: msg.message.message_id, parse_mode: 'HTML', reply_to_message_id: msg.message.reply_to_message.message_id, reply_markup: { inline_keyboard: inlineBtnArr }});
 				});
 			}
-			rateLimit.remove('BtnVoteVoting', msg.from.id);
 			return telegramBot.answerCallbackQuery(msg.id, {
 				text: getLanguage('recorded')
 			});
