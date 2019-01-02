@@ -88,17 +88,14 @@ telegramBot.on('callback_query', async msg => {
 		rateLimit.add('BtnVoteVoting', msg.from.id);
 		logger.log('notice', 'User %s Used Vote Voting Button(Vote to %s, Value %s) in %s(%s)', `${name}(${msg.from.id})`, data.vote, data.value, msg.message.chat.title, msg.message.chat.id);
 		var voteData = await database.query('SELECT name, data, closed, deleted FROM vote WHERE id=?', data.vote);
-		const votingId = await database.query('SELECT id FROM voting WHERE voteId=? AND userId=? ORDER BY id DESC LIMIT 1', [ data.vote, msg.from.id ]);
 		voteData.data = JSON.parse(voteData.data);
 		if(voteData.closed) return telegramBot.answerCallbackQuery(msg.id, { text: getLanguage('wasClosed')});
 		if(voteData.deleted) return telegramBot.answerCallbackQuery(msg.id, { text: getLanguage('wasDeleted')});
-		if(votingId) database.query('UPDATE voting SET active=0 WHERE id=?', votingId);
-		database.query('UPDATE vote SET count=count+1 WHERE id=?;', data.vote);
 		database.query('INSERT INTO voting(date, voteId, userId, username, value) VALUES(?, ?, ?, ?, ?);', [
 			Date.now(), data.vote, msg.from.id, name, data.value
 		]).then(() => {
 			if(voteData.data.type === 'public' || voteData.data.type === 'counter') {
-				database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', data.vote).then(res => {
+				database.query('SELECT v1.* FROM voting v1 WHERE date = (SELECT MAX(date) FROM voting v2 WHERE v1.userId = v2.userId ORDER BY v2.id LIMIT 1) AND v1.voteId = ?;', data.vote).then(res => {
 					let selections = [];
 					for(let i = 0; i < voteData.data.selections.length; i++) {
 						let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res }}).value;
