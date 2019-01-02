@@ -28,7 +28,7 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'view') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(View %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT * FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT v1.username, v1.value FROM voting v1 WHERE date = (SELECT MAX(date) FROM voting v2 WHERE v1.userId = v2.userId ORDER BY v2.id LIMIT 1) AND v1.voteId = ?;', id);
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('wasDeleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
 				let selections = [], inlineBtnArr = [];
@@ -74,7 +74,7 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'result') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(Result %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT v1.username, v1.value FROM voting v1 WHERE date = (SELECT MAX(date) FROM voting v2 WHERE v1.userId = v2.userId ORDER BY v2.id LIMIT 1) AND v1.voteId = ?;', id);
 				if(parseInt(voteData.groupId) !== msg.chat.id) return telegram.bot.sendMessage(msg.chat.id, getLanguage('notThisChat'), { reply_to_message_id: msg.message_id });
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('deleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
@@ -89,7 +89,7 @@ module.exports = (telegram, logger, utils) => {
 			if(action === 'aresult') {
 				const id = msgArr.shift();
 				logger.log('notice', 'User %s Used Vote Command(AResult %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, id, msg.chat.title, msg.chat.id);
-				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT username, value FROM voting WHERE voteId=? AND active=1;', id);
+				const voteData = await utils.database.query('SELECT groupId, name, data, closed, deleted FROM vote WHERE id=?;', id), votingData = await utils.database.query('SELECT v1.username, v1.value FROM voting v1 WHERE date = (SELECT MAX(date) FROM voting v2 WHERE v1.userId = v2.userId ORDER BY v2.id LIMIT 1) AND v1.voteId = ?;', id);
 				if(parseInt(voteData.groupId) !== msg.chat.id) return telegram.bot.sendMessage(msg.chat.id, getLanguage('notThisChat'), { reply_to_message_id: msg.message_id });
 				if(voteData.deleted) return telegram.bot.sendMessage(msg.chat.id, getLanguage('wasDeleted'), { reply_to_message_id: msg.message_id });
 				voteData.data = JSON.parse(voteData.data);
