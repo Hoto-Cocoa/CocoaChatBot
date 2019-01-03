@@ -2,7 +2,6 @@ const TelegramBot = require('node-telegram-bot-api');
 const Logger = require('winston');
 const Config = require('./config');
 const Database = require('./modules/Database');
-const jsonQuery = require('json-query');
 const Language = require('./modules/Language');
 const RateLimit = require('./modules/RateLimit');
 const Events = require('events');
