@@ -2,7 +2,7 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const language = (await utils.language.getLanguageData(msg.from.language_code, msg.from.id)).help;
 
-		if(msg.text.toLowerCase() === 'help' || msg.text === '/start') {
+		if(msg.command_text.toLowerCase() === 'help' || msg.command_text === '/start') {
 			logger.log('notice', 'User %s Used Help Command in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, msg.chat.title, msg.chat.id);
 			const keys = Object.keys(language);
 			var msgArr = [];

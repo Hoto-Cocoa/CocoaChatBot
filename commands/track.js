@@ -4,8 +4,8 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'track');
 
-		if(msg.text.toLowerCase().startsWith('track ')) {
-			var msgArr = msg.text.substring(6).split(' ');
+		if(msg.command_text.toLowerCase().startsWith('track ')) {
+			var msgArr = msg.command_text.substring(6).split(' ');
 			const action = msgArr.shift().toLowerCase();
 
 			if(action === 'list') {

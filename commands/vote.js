@@ -4,8 +4,8 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'vote');
 
-		if(msg.text.toLowerCase().startsWith('vote ')) {
-			var msgArr = msg.text.substring(5).split(' ');
+		if(msg.command_text.toLowerCase().startsWith('vote ')) {
+			var msgArr = msg.command_text.substring(5).split(' ');
 			const action = msgArr.shift().toLowerCase();
 			msgArr = msgArr.join(' ').split(',');
 			for(let i = 0; i < msgArr.length; i++) msgArr[i] = msgArr[i].trim();

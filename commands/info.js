@@ -2,7 +2,7 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'info');
 
-		if(msg.text.toLowerCase() === 'info') {
+		if(msg.command_text.toLowerCase() === 'info') {
 			logger.log('notice', 'User %s Used Info Command(Get %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, msg.reply_to_message ? msg.reply_to_message.message_id : msg.message_id, msg.chat.title, msg.chat.id);
 			const msgData = msg.reply_to_message ? msg.reply_to_message : msg;
 			var toSendArr = [];

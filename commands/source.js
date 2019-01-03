@@ -6,7 +6,7 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'source');
 
-		if(msg.text.toLowerCase() === 'source') {
+		if(msg.command_text.toLowerCase() === 'source') {
 			logger.log('notice', 'User %s Used Source Command in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, msg.chat.title, msg.chat.id);
 			if(!msg.photo && (!msg.reply_to_message || !msg.reply_to_message.photo)) {
 				return telegram.bot.sendMessage(msg.chat.id, getLanguage('noPhoto'), { reply_to_message_id: msg.message_id });

@@ -4,8 +4,8 @@ module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'school');
 
-		if(msg.text.startsWith('school ')) {
-			const msgArr = msg.text.substring(7).split(' ');
+		if(msg.command_text.startsWith('school ')) {
+			const msgArr = msg.command_text.substring(7).split(' ');
 			logger.log('notice', 'User %s Used School Command(Get %s of %s %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, msgArr[0], msgArr[1], msgArr[2], msg.chat.title, msg.chat.id);
 			const schools = await schoolMeal.findSchool(msgArr[1], msgArr[2]).catch(e => {
 				switch(e) {

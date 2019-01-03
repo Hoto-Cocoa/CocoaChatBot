@@ -8,9 +8,8 @@ math.config({
 module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'math');
-
-		if(msg.text.startsWith('=')) {
-			const input = msg.text.substring(1);
+		if(msg.command_text.startsWith('=')) {
+			const input = msg.command_text.substring(1);
 			if(input.match(/[ㄱ-힣]/)) return;
 			logger.log('notice', 'User %s Used Math Command(Calculate %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, input, msg.chat.title, msg.chat.id);
 			for(var i = 0; i < require('../config').BannedWords.length; i++) {
