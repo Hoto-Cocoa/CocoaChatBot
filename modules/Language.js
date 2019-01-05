@@ -7,7 +7,7 @@ module.exports = class Language {
 	}
 
 	async getLanguage(langCode, userId, msgCategory) {
-		var languageSetting = await this.database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
+		var languageSetting = await this.database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" ORDER BY id DESC LIMIT 1;', userId);
 		langCode = languageSetting ? languageSetting : langCode ? langCode.substring(0, 2) : 'en';
 		var languageData = this.languages[langCode] ? this.languages[langCode] : this.languages['en'];
 		return (msgCode, ...args) => {
@@ -17,7 +17,7 @@ module.exports = class Language {
 	}
 
 	async getLanguageData(language, userId) {
-		var languageSetting = await this.database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" AND active=1;', userId);
+		var languageSetting = await this.database.query('SELECT value FROM setting WHERE userId=? AND `key`="language" ORDER BY id DESC LIMIT 1;', userId);
 		language = languageSetting ? languageSetting : language ? language.substring(0, 2) : 'en';
 		return this.languages[language] ? this.languages[language] : this.languages['en'];
 	}
