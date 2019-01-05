@@ -11,7 +11,7 @@ module.exports = class Language {
 		langCode = languageSetting ? languageSetting : langCode ? langCode.substring(0, 2) : 'en';
 		var languageData = this.languages[langCode] ? this.languages[langCode] : this.languages['en'];
 		return (msgCode, ...args) => {
-			var msg = languageData[msgCategory] ? languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : this.languages['en'][msgCategory][msgCode] ? this.languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : this.languages['en'][msgCategory] ? this.languages['en'][msgCategory][msgCode] ? this.languages['en'][msgCategory][msgCode] : 'Error: Invalid Message Code' : 'Error: Invalid Message Code';
+			var msg = languageData[msgCategory] ? languageData[msgCategory][msgCode] ? languageData[msgCategory][msgCode] : this.languages['en'][msgCategory][msgCode] ? this.languages['en'][msgCategory][msgCode] : msgCode : this.languages['en'][msgCategory] ? this.languages['en'][msgCategory][msgCode] ? this.languages['en'][msgCategory][msgCode] : msgCode : msgCode;
 			return args ? require('util').format(msg, ...args) : msg;
 		}
 	}
