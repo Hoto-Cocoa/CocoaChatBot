@@ -124,5 +124,8 @@
         "status4": "地點 到着",
         "status5": "配送 出發",
         "status6": "配送 完了"
+    },
+    "search": {
+        "noResult": "結果가 없습니다!"
     }
 }
