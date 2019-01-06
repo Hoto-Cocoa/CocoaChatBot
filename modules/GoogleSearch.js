@@ -9,7 +9,7 @@ module.exports = class GoogleSearch {
 
 	async getResult(searchValue = '') {
 		return new Promise(async (resolve) => {
-			const $ = cheerio.load(await asyncRequest(util.format('https://www.google.com/search?hl=en&q=%s&sa=N&num=%s&ie=UTF-8&oe=UTF-8&gws_rd=ssl', encodeURI(searchValue), this.maxResultCount)));
+			const $ = cheerio.load((await asyncRequest(util.format('https://www.google.com/search?hl=en&q=%s&sa=N&num=%s&ie=UTF-8&oe=UTF-8&gws_rd=ssl', encodeURI(searchValue), this.maxResultCount))).body);
 			var result = [];
 			$('div.g').each((i, e) => {
 				$(e).find('h3.r a')[0] && result.push({

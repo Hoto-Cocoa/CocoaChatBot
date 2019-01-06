@@ -20,7 +20,6 @@ module.exports = class SweetTracker {
 	async getTrackingInfo(courier = '', code = '') {
 		const courierCode = this.getCourierCode(courier);
 		if(courierCode instanceof Error) return courierCode;
-		const result = await asyncRequest(`https://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=${this.key}&t_code=${courierCode}&t_invoice=${code}`);
-		return JSON.parse(result);
+		return (await asyncRequest(`https://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=${this.key}&t_code=${courierCode}&t_invoice=${code}`)).body;
 	}
 }

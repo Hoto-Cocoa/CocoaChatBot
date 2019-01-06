@@ -22,7 +22,7 @@ module.exports = (telegram, logger, utils) => {
 					throw new Error();
 				}
 			} catch(e) {
-				const result = JSON.parse(await asyncRequest(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${require('../config').Wolfram.Token}&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`));
+				const result = JSON.parse((await asyncRequest(`https://api.wolframalpha.com/v2/query?input=${encodeURIComponent(input)}&primary=true&appid=${require('../config').Wolfram.Token}&format=plaintext&output=json&podtitle=Result&podtitle=Decimal%20approximation&podtitle=Power%20of%2010%20representation&podtitle=Exact%20result`)).body);
 				if(!result.queryresult.pods) return telegram.bot.sendMessage(msg.chat.id, getLanguage('wrongInput'), { reply_to_message_id: msg.message_id });
 				const value = result.queryresult.pods[0].subpods[0].plaintext;
 				var options = { reply_to_message_id: msg.message_id };

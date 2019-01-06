@@ -24,8 +24,7 @@ module.exports = class SchoolMeal {
 			if(/^[ALOU-Z][0-9]{9}$/.test(code)) return reject(`NOT_SUPPORTED`);
 			if(code === 'J100000855') {
 				if(type === 'date') return reject('NO_DATA');
-				var result = await asyncRequest(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`);
-				result = JSON.parse(result);
+				var result = (await asyncRequest(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body;
 				return (!result || !result[type]) ? reject('NO_DATA') : resolve(result[type]);
 			}
 			schoolApi.get(code, (err, res) => {
