@@ -1,5 +1,6 @@
 const asyncRequest = require('./AsyncRequest');
 const cheerio = require('cheerio');
+// const iconv = require('iconv-lite');
 
 module.exports = class KaraokeApi {
 	async getSongList(provider = '', searchValue = '') {
@@ -28,6 +29,21 @@ module.exports = class KaraokeApi {
 					});
 				});
 				return songsData.length ? songsData : new Error('NO_RESULT');
+			// case '금영':
+			// case 'ky':
+			// 	var $ = cheerio.load(iconv.decode((await asyncRequest(`http://www.ikaraoke.kr/isong/search_result.asp?sch_txt=${searchValue.replace(/([가-힣ㄱ-ㅎㅏ-ㅣ])/g, (m, p1) => iconv.encode(new Buffer(p1), 'EUC-KR')).replace(/(\d*)/g, (m, p1) => p1 === '' ? '' : `%${parseInt(p1).toString(16).toUpperCase()}`).replace(/ /g, '')}`, null, 'GET', null, null)).body, 'EUC-KR'));
+			// 	var data = $('.tbl_board > table > tbody > tr');
+			// 	var songsData = [];
+			// 	data.each((i, e) => {
+			// 		console.log(i);
+			// 		if(e.attribs.onmouseover) {
+			// 			songsData.push({
+			// 				number: $(e).find('td.ac').first().text(),
+			// 				title: $(e).find('td.pl8').first().find('span')[0] && $(e).find('td.pl8').first().find('span')[0].attribs.title ? $(e).find('td.pl8').first().find('span')[0].attribs.title : $(e).find('td.pl8').first().find('a.b')[0].attribs.title
+			// 			});
+			// 		}
+			// 	});
+			// 	return songsData.length ? songsData : new Error('NO_RESULT');
 			default: return new Error('NO_PROVIDER');
 		}
 	}
