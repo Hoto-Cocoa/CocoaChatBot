@@ -1,8 +1,20 @@
+/**
+ * @file KaraokeApi.js
+ * @author Hoto Cocoa <cocoa@hoto.us>
+ * @license AGPL-3.0
+ */
+
 const asyncRequest = require('./AsyncRequest');
 const cheerio = require('cheerio');
 // const iconv = require('iconv-lite');
 
 module.exports = class KaraokeApi {
+	/**
+	 * Get Song List from Provider
+	 * @param {String} provider 
+	 * @param {String} searchValue 
+	 * @returns {(Array|Error)} Result of Search
+	 */
 	async getSongList(provider = '', searchValue = '') {
 		switch(provider) {
 			case 'tj':

@@ -1,6 +1,15 @@
+/**
+ * @file SweetTracker.js
+ * @author Hoto Cocoa <cocoa@hoto.us>
+ * @license AGPL-3.0
+ */
+
 const courierList = require('./SweetTrackerCourierList'), asyncRequest = require('./AsyncRequest');
 
 module.exports = class SweetTracker {
+	/**
+	 * @param {String} key 
+	 */
 	constructor(key) {
 		this.key = key;
 	}
@@ -9,6 +18,10 @@ module.exports = class SweetTracker {
 		return Object.keys(courierList);
 	}
 
+	/**
+	 * @param {String} courierName 
+	 * @returns {(String|Error)}
+	 */
 	getCourierCode(courierName = '') {
 		for(var i in this.getCourierList()) {
 			if(this.getCourierList()[i].toLowerCase() === courierName.toLowerCase()) return this.getCourierList()[i].code;
@@ -17,6 +30,11 @@ module.exports = class SweetTracker {
 		return new Error('NO_COURIER');
 	}
 
+	/**
+	 * @param {String} courier 
+	 * @param {String} code 
+	 * @returns {Object}
+	 */
 	async getTrackingInfo(courier = '', code = '') {
 		const courierCode = this.getCourierCode(courier);
 		if(courierCode instanceof Error) return courierCode;

@@ -1,7 +1,17 @@
+/**
+ * @file SchoolMeal.js
+ * @author Hoto Cocoa <cocoa@hoto.us>
+ * @license AGPL-3.0
+ */
+
 const schoolApi = require('calcium');
 const asyncRequest = require('./AsyncRequest');
 
 module.exports = class SchoolMeal {
+	/**
+	 * @param {String} location 
+	 * @param {String} name 
+	 */
 	findSchool(location, name) {
 		return new Promise((resolve, reject) => {
 			if(name.length < 2) reject('SHORT_NAME')
@@ -19,6 +29,10 @@ module.exports = class SchoolMeal {
 		});
 	}
 
+	/**
+	 * @param {String} type 
+	 * @param {Sting} code 
+	 */
 	getMeal(type, code) {
 		return new Promise(async (resolve, reject) => {
 			if(/^[ALOU-Z][0-9]{9}$/.test(code)) return reject(`NOT_SUPPORTED`);

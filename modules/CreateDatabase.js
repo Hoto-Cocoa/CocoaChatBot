@@ -1,5 +1,15 @@
+/**
+ * @file CreateDatabase.js
+ * @author Hoto Cocoa <cocoa@hoto.us>
+ * @license AGPL-3.0
+ */
+
 const Sequelize = require('sequelize');
 
+/**
+ * @param {Object} config
+ * @param {Logger} logger
+ */
 module.exports = (config, logger) => {
 	const sequelize = new Sequelize(config.database, config.user, config.password, {
 		dialect: 'mysql',
