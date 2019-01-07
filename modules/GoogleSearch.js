@@ -27,7 +27,7 @@ module.exports = class GoogleSearch {
 				$(e).find('h3.r a')[0] && result.push({
 					index: i,
 					title: $(e).find('h3.r a').first().text(),
-					href: $(e).find('h3.r a')[0].attribs.href.replace(/(?:\/url\?q=)?(.*?)(?:&sa=.*)/, '$1'),
+					href: decodeURI($(e).find('h3.r a')[0].attribs.href.replace(/(?:\/url\?q=)?(.*?)(?:&sa=.*)/, '$1')),
 					description: $(e).find('div.s').find('span.st').text()
 				});
 			});
