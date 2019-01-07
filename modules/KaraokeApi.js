@@ -22,7 +22,6 @@ module.exports = class KaraokeApi {
 				var $ = cheerio.load((await asyncRequest(`https://www.tjmedia.co.kr/tjsong/song_search_list.asp?strType=0&strText=${encodeURI(searchValue)}`)).body);
 				var songsData = [];
 				$('#contents > form > #BoardType1 > table > tbody > tr').each((i, e) => {
-					console.log(e);
 					var songData = [];
 					var needOver60 = false;
 					$(e).find('td').each((i, e) => {
