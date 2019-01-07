@@ -127,5 +127,10 @@
 	},
 	"search": {
 		"noResult": "Cannot find any result!"
+	},
+	"karaoke": {
+		"noProvider": "The provider you entered that not supported!",
+		"noResult": "Cannot find any result!",
+		"needOver60": "Need Over 60 Series"
 	}
 }
