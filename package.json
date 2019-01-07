@@ -19,6 +19,7 @@
   "dependencies": {
     "calcium": "^0.5.3",
     "cheerio": "^1.0.0-rc.2",
+    "iconv-lite": "^0.4.24",
     "json-query": "^2.2.2",
     "mathjs": "^5.4.0",
     "mysql2": "^1.6.4",

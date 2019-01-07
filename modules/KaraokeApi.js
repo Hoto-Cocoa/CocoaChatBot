@@ -6,7 +6,7 @@
 
 const asyncRequest = require('./AsyncRequest');
 const cheerio = require('cheerio');
-// const iconv = require('iconv-lite');
+const iconv = require('iconv-lite');
 
 module.exports = class KaraokeApi {
 	/**
@@ -19,10 +19,10 @@ module.exports = class KaraokeApi {
 		switch(provider) {
 			case 'tj':
 			case '태진':
-				var $ = cheerio.load((await asyncRequest(`https://www.tjmedia.co.kr/tjsong/song_search_list.asp?strType=0&strText=${searchValue}&strCond=0&strSize01=100&strSize02=100&strSize03=100&strSize04=100&strSize05=100`)).body);
-				var data = $('#contents > form > #BoardType1 > table > tbody > tr');
+				var $ = cheerio.load((await asyncRequest(`https://www.tjmedia.co.kr/tjsong/song_search_list.asp?strType=0&strText=${encodeURI(searchValue)}`)).body);
 				var songsData = [];
-				data.each((i, e) => {
+				$('#contents > form > #BoardType1 > table > tbody > tr').each((i, e) => {
+					console.log(e);
 					var songData = [];
 					var needOver60 = false;
 					$(e).find('td').each((i, e) => {
@@ -36,26 +36,26 @@ module.exports = class KaraokeApi {
 						singer: songData.shift(),
 						lyricist: songData.shift(),
 						composer: songData.shift(),
-						needOver60,
-						addedDate: null
+						needOver60
 					});
 				});
 				return songsData.length ? songsData : new Error('NO_RESULT');
-			// case '금영':
-			// case 'ky':
-			// 	var $ = cheerio.load(iconv.decode((await asyncRequest(`http://www.ikaraoke.kr/isong/search_result.asp?sch_txt=${searchValue.replace(/([가-힣ㄱ-ㅎㅏ-ㅣ])/g, (m, p1) => iconv.encode(new Buffer(p1), 'EUC-KR')).replace(/(\d*)/g, (m, p1) => p1 === '' ? '' : `%${parseInt(p1).toString(16).toUpperCase()}`).replace(/ /g, '')}`, null, 'GET', null, null)).body, 'EUC-KR'));
-			// 	var data = $('.tbl_board > table > tbody > tr');
-			// 	var songsData = [];
-			// 	data.each((i, e) => {
-			// 		console.log(i);
-			// 		if(e.attribs.onmouseover) {
-			// 			songsData.push({
-			// 				number: $(e).find('td.ac').first().text(),
-			// 				title: $(e).find('td.pl8').first().find('span')[0] && $(e).find('td.pl8').first().find('span')[0].attribs.title ? $(e).find('td.pl8').first().find('span')[0].attribs.title : $(e).find('td.pl8').first().find('a.b')[0].attribs.title
-			// 			});
-			// 		}
-			// 	});
-			// 	return songsData.length ? songsData : new Error('NO_RESULT');
+			case '금영':
+			case 'ky':
+				var $ = cheerio.load(iconv.decode((await asyncRequest(`http://www.ikaraoke.kr/isong/search_result.asp?sch_txt=${`%${iconv.encode(searchValue, 'EUC-KR').join('%')}`.replace(/%(\d*)/g, (m, p1) => `%${parseInt(p1).toString(16).toUpperCase()}`)}`, null, 'GET', null, null)).body, 'EUC-KR'))
+				var songsData = [];
+				$('.tbl_board > table > tbody > tr').each((i, e) => {
+					if(e.attribs.onmouseover && $(e).find('td.ac').first().text()) {
+						songsData.push({
+							number: $(e).find('td.ac').first().text(),
+							title: $(e).find('td.pl8').first().find('span')[0] && $(e).find('td.pl8').first().find('span')[0].attribs.title ? $(e).find('td.pl8').first().find('span')[0].attribs.title : $(e).find('td.pl8').first().find('a.b')[0].attribs.title,
+							singer: $(e).find('.tit').first().text(),
+							lyricist: $(e).find('.pl8').last().text().split('<br>')[1],
+							composer: $(e).find('.pl8').last().text().split('<br>')[0]
+						});
+					}
+				});
+				return songsData.length ? songsData : new Error('NO_RESULT');
 			default: return new Error('NO_PROVIDER');
 		}
 	}
