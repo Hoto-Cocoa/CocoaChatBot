@@ -45,7 +45,7 @@ telegramBot.on('message', msg => {
 	if(msgText.startsWith(Config.Telegram.Prefix ? Config.Telegram.Prefix : '')) {
 		if(msg.text) msg.command_text = msg.text.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0);
 		if(msg.caption) msg.command_text = msg.caption.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0) && delete msg.caption;
-		if(!msg.text) msg.text = '';
+		if(!msg.command_text) msg.command_text = '';
 		msg.from.parsed_username = username;
 		telegramEvents.emit('message', msg);
 	}
