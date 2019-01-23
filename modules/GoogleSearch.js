@@ -30,7 +30,7 @@ module.exports = class GoogleSearch {
 					href: decodeURI($(e).find('h3.r a')[0].attribs.href.replace(/(?:\/url\?q=)?(.*?)(?:&sa=.*)/, '$1')),
 					description: $(e).find('div.s').find('span.st').text()
 				});
-			});
+			}); 
 			resolve(result);
 		});
 	}
