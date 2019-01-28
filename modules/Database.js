@@ -4,23 +4,21 @@
  * @license AGPL-3.0
  */
 
-const mysql = require('mysql2');
-
 module.exports = class Database {
 	/**
 	 * @param {Object} config 
 	 * @param {Logger} logger 
 	 */
 	constructor(config, logger) {
-		this.connection = mysql.createConnection(Object.assign(config, { supportBigNumbers: true, bigNumberStrings: true }));
+		this.connection = require('mysql2').createConnection(Object.assign(config, { supportBigNumbers: true, bigNumberStrings: true }));
 		this.connection.connect(e => {
 			if(e) {
-				logger.log('error', e);
+				logger.log('error', e.stack);
 				throw e;
 			}
 			logger.log('notice', 'Connected to Database(#%s)', this.connection.threadId);
 		});
-		this.connection.on('error', e => logger.log('error', e));
+		this.connection.on('error', e => logger.log('error', e.stack));
 		setInterval(() => this.connection.query('SELECT 1 LIMIT 1;'), 300);
 	}
 
