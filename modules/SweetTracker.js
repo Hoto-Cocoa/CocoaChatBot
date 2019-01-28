@@ -4,7 +4,7 @@
  * @license AGPL-3.0
  */
 
-const courierList = require('./SweetTrackerCourierList'), asyncRequest = require('./AsyncRequest');
+const courierList = require('./SweetTrackerCourierList');
 
 module.exports = class SweetTracker {
 	/**
@@ -38,6 +38,6 @@ module.exports = class SweetTracker {
 	async getTrackingInfo(courier = '', code = '') {
 		const courierCode = this.getCourierCode(courier);
 		if(courierCode instanceof Error) return courierCode;
-		return (await asyncRequest(`https://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=${this.key}&t_code=${courierCode}&t_invoice=${code}`)).body;
+		return JSON.parse((await require('./AsyncRequest')(`https://info.sweettracker.co.kr/api/v1/trackingInfo?t_key=${this.key}&t_code=${courierCode}&t_invoice=${code}`)).body);
 	}
 }
