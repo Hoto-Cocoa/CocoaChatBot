@@ -4,10 +4,6 @@
  * @license AGPL-3.0
  */
 
-const asyncRequest = require('./AsyncRequest');
-const cheerio = require('cheerio');
-const iconv = require('iconv-lite');
-
 module.exports = class KaraokeApi {
 	/**
 	 * Get Song List from Provider
@@ -19,7 +15,7 @@ module.exports = class KaraokeApi {
 		switch(provider) {
 			case 'tj':
 			case '태진':
-				var $ = cheerio.load((await asyncRequest(`https://www.tjmedia.co.kr/tjsong/song_search_list.asp?strType=0&strText=${encodeURI(searchValue)}`)).body);
+				var $ = require('cheerio').load((await require('./AsyncRequest')(`https://www.tjmedia.co.kr/tjsong/song_search_list.asp?strType=0&strText=${encodeURI(searchValue)}`)).body);
 				var songsData = [];
 				$('#contents > form > #BoardType1 > table > tbody > tr').each((i, e) => {
 					var songData = [];
@@ -41,8 +37,8 @@ module.exports = class KaraokeApi {
 				return songsData.length ? songsData : new Error('NO_RESULT');
 			case '금영':
 			case 'ky':
-				var $ = cheerio.load(iconv.decode((await asyncRequest(`http://www.ikaraoke.kr/isong/search_result.asp?sch_txt=${`%${iconv.encode(searchValue, 'EUC-KR').join('%')}`.replace(/%(\d*)/g, (m, p1) => `%${parseInt(p1).toString(16).toUpperCase()}`)}`, null, 'GET', null, null)).body, 'EUC-KR'))
-				var songsData = [];
+				var $ = require('cheerio').load(require('iconv-lite').decode((await require('./AsyncRequest')(`http://www.ikaraoke.kr/isong/search_result.asp?sch_txt=${`%${require('iconv-lite').encode(searchValue, 'EUC-KR').join('%')}`.replace(/%(\d*)/g, (m, p1) => `%${parseInt(p1).toString(16).toUpperCase()}`)}`, null, 'GET', null, null)).body, 'EUC-KR')); // eslint-disable-line no-redeclare
+				var songsData = []; // eslint-disable-line no-redeclare
 				$('.tbl_board > table > tbody > tr').each((i, e) => {
 					if(e.attribs.onmouseover && $(e).find('td.ac').first().text()) {
 						songsData.push({
