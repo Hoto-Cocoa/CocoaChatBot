@@ -1,7 +1,3 @@
-const Sauce = require('sagiri');
-const sauce = new Sauce(require('../config').SauceNAO.Token);
-const tmpDir = require('os').tmpdir();
-
 module.exports = (telegram, logger, utils) => {
 	telegram.events.on('message', async msg => {
 		const getLanguage = await utils.language.getLanguage(msg.from.language_code, msg.from.id, 'source');
@@ -13,8 +9,8 @@ module.exports = (telegram, logger, utils) => {
 			}
 
 			const photoObj = msg.photo ? msg.photo : msg.reply_to_message.photo, photo = photoObj[photoObj.length - 1];
-			telegram.bot.downloadFile(photo.file_id, tmpDir).then(filePath => {
-				sauce.getSauce(filePath).then(sauceInfo => {
+			telegram.bot.downloadFile(photo.file_id, require('os').tmpdir()).then(filePath => {
+				new (require('sagiri'))(require('../config').SauceNAO.Token).getSauce(filePath).then(sauceInfo => {
 					var sauceData = sauceInfo[0], sauceUrl = sauceData.original.data.pawoo_id ? `${sauceData.url}/${sauceData.original.data.pawoo_id}` : sauceData.url, toSendMsgs = [];
 					toSendMsgs.push(`<a href="${sauceUrl}">${getLanguage('viewOn', sauceData.site)}</a>`);
 					toSendMsgs.push(`${getLanguage('similarity')}: ${sauceData.similarity}`);
