@@ -1,5 +1,3 @@
-const jsonQuery = require('json-query');
-
 module.exports = (telegram, logger, utils) => {
 	telegram.events.on('callback_query', async msg => {
 		if(msg.data.action === 'VoteVoting') {
@@ -16,7 +14,7 @@ module.exports = (telegram, logger, utils) => {
 					utils.database.query('SELECT v1.* FROM voting v1 WHERE date = (SELECT MAX(date) FROM voting v2 WHERE v1.userId = v2.userId ORDER BY v2.id LIMIT 1) AND v1.voteId = ?;', msg.data.vote).then(res => {
 						let selections = [];
 						for(let i = 0; i < voteData.data.selections.length; i++) {
-							let q = jsonQuery(`[**][*value=${i}].username`, { data: { data: res }}).value;
+							let q = require('json-query')(`[**][*value=${i}].username`, { data: { data: res }}).value;
 							selections.push(`<b>${voteData.data.selections[i]}</b>: ${q.length}${q.length && voteData.data.type === 'public' ? `(${q.join(', ')})` : ''}`);
 						}
 						let inlineBtnArr = [];
