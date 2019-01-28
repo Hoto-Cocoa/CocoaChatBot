@@ -44,7 +44,7 @@ telegramBot.on('message', msg => {
 	logger.log('debug', 'User %s Said "%s" in %s(%s)', `${username}(${msg.from.id})`, msgText, msg.chat.title, msg.chat.id);
 	if(msgText.startsWith(Config.Telegram.Prefix ? Config.Telegram.Prefix : '')) {
 		if(msg.text) msg.command_text = msg.text.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0);
-		if(msg.caption) msg.command_text = msg.caption.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0) && delete msg.caption;
+		if(msg.caption) (msg.command_text = msg.caption.substring(Config.Telegram.Prefix ? Config.Telegram.Prefix.length : 0)) && delete msg.caption;
 		if(!msg.command_text) msg.command_text = '';
 		msg.from.parsed_username = username;
 		telegramEvents.emit('message', msg);
