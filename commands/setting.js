@@ -4,7 +4,6 @@ module.exports = (telegram, logger, utils) => {
 
 		if(msg.command_text.startsWith('setting ')) {
 			const msgArr = msg.command_text.substring(8).split(' ');
-			console.log(msgArr);
 			logger.log('notice', 'User %s Used Setting Command(Set "%s" to %s) in %s(%s)', `${msg.from.parsed_username}(${msg.from.id})`, msgArr[0], msgArr[1], msg.chat.title, msg.chat.id);
 			utils.database.query('INSERT INTO setting(date, userId, `key`, value) VALUES(?, ?, ?, ?);', [
 				Date.now(), msg.from.id, msgArr[0], msgArr[1]
