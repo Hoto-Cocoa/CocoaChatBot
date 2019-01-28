@@ -4,10 +4,6 @@
  * @license AGPL-3.0
  */
 
-const asyncRequest = require('./AsyncRequest');
-const cheerio = require('cheerio')
-const util = require('util');
-
 module.exports = class GoogleSearch {
 	/**
 	 * @param {Number} maxResultCount 
@@ -21,7 +17,7 @@ module.exports = class GoogleSearch {
 	 */
 	async getResult(searchValue = '') {
 		return new Promise(async (resolve) => {
-			const $ = cheerio.load((await asyncRequest(util.format('https://www.google.com/search?hl=en&q=%s&sa=N&num=%s&ie=UTF-8&oe=UTF-8&gws_rd=ssl', encodeURI(searchValue), this.maxResultCount))).body);
+			const $ = require('cheerio').load((await require('./AsyncRequest')(`https://www.google.com/search?hl=en&q=${encodeURI(searchValue)}&sa=N&num=${this.maxResultCount}&ie=UTF-8&oe=UTF-8&gws_rd=ssl`)).body);
 			var result = [];
 			$('div.g').each((i, e) => {
 				$(e).find('h3.r a')[0] && result.push({
