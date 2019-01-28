@@ -24,7 +24,7 @@ module.exports = (telegram, logger) => {
 
 			if(action === 'eval') {
 				if(msg.from.id !== require('../config').Telegram.Owner) return telegram.bot.sendMessage(msg.chat.id, 'https://www.youtube.com/watch?v=4B5BauNBH0A', { reply_to_message_id: msg.message_id });
-				return telegram.bot.sendMessage(msg.chat.id, eval(msgArr.join(' ')), { reply_to_message_id: msg.message_id });
+				return telegram.bot.sendMessage(msg.chat.id, eval(msgArr.join(' ')), { reply_to_message_id: msg.message_id }); // eslint-disable-line no-eval
 			}
 		}
 	});
