@@ -5,7 +5,6 @@
  */
 
 const schoolApi = require('calcium');
-const asyncRequest = require('./AsyncRequest');
 
 module.exports = class SchoolMeal {
 	/**
@@ -38,7 +37,7 @@ module.exports = class SchoolMeal {
 			if(/^[ALOU-Z][0-9]{9}$/.test(code)) return reject(`NOT_SUPPORTED`);
 			if(code === 'J100000855') {
 				if(type === 'date') return reject('NO_DATA');
-				var result = (await asyncRequest(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body;
+				var result = (await require('./AsyncRequest')(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body;
 				return (!result || !result[type]) ? reject('NO_DATA') : resolve(result[type]);
 			}
 			schoolApi.get(code, (err, res) => {
