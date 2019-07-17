@@ -10,9 +10,7 @@ module.exports = class Language {
 	 */
 	constructor(database) {
 		this.languages = [], this.database = database;
-		require('fs').readdirSync(__dirname + '/../languages/').forEach(file => {
-			this.languages[file.substring(0, file.length - 5)] = require(`${__dirname}/../languages/${file}`);
-		});
+		require('fs').readdirSync(__dirname + '/../languages/').forEach(file => file === '.git' || (this.languages[file.substring(0, file.length - 5)] = require(`${__dirname}/../languages/${file}`)));
 	}
 
 	/**

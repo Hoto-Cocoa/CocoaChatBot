@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "exit 0;"
+    "test": "node ./commands_test/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,12 +19,10 @@
   "dependencies": {
     "calcium": "^0.5.3",
     "cheerio": "^1.0.0-rc.2",
-    "iconv-lite": "^0.4.24",
     "json-query": "^2.2.2",
     "mathjs": "^5.4.0",
     "mysql2": "^1.6.4",
     "node-telegram-bot-api": "^0.30.0",
-    "request": "^2.88.0",
     "sagiri": "^1.4.4",
     "sequelize": "^4.42.0",
     "winston": "^3.1.0"

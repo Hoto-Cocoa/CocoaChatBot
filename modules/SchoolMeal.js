@@ -17,7 +17,7 @@ module.exports = class SchoolMeal {
 			schoolApi.find(location, name, (err, res) => {
 				if(err) {
 					if(err.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' || err.message.startsWith('Hostname/IP doesn\'t match certificate\'s altnames')) return reject('SSL_CERTIFICATE_ERROR');
-					if(err.message.startsWith('No such department')) return reject('NO_SUCH_DEPARTMENT');
+					if(err.message.search('No such department')) return reject('NO_SUCH_DEPARTMENT');
 					return reject(err);
 				}
 				if(!res || !res.length) return reject('NO_SUCH_SCHOOL');
@@ -37,7 +37,7 @@ module.exports = class SchoolMeal {
 			if(/^[ALOU-Z][0-9]{9}$/.test(code)) return reject(`NOT_SUPPORTED`);
 			if(code === 'J100000855') {
 				if(type === 'date') return reject('NO_DATA');
-				var result = (await require('./AsyncRequest')(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body;
+				var result = await require('./AsyncRequest')(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`);
 				return (!result || !result[type]) ? reject('NO_DATA') : resolve(result[type]);
 			}
 			schoolApi.get(code, (err, res) => {

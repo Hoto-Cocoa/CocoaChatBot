@@ -16,7 +16,7 @@ module.exports = class Database {
 				logger.log('error', e.stack);
 				throw e;
 			}
-			logger.log('notice', 'Connected to Database(#%s)', this.connection.threadId);
+			if(logger) logger.log('notice', 'Connected to Database(#%s)', this.connection.threadId);
 		});
 		this.connection.on('error', e => logger.log('error', e.stack));
 		setInterval(() => this.connection.query('SELECT 1 LIMIT 1;'), 300);
