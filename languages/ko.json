@@ -12,7 +12,7 @@
         "wrongType": "잘못된 유형입니다! (%s)",
         "notThisChat": "이 투표는 본 채팅방에서 생성하지 않았습니다. 투표를 만든 채팅방에서 명령어를 실행해주세요.",
         "notClosed": "이 투표는 닫혀 있지 않습니다.",
-        "recorded": "당신의 표가 반영되었습니다."
+        "recorded": "당신의 표를 반영했습니다."
     },
     "get": {
         "result": "여기 %s번째 메시지에요!",
@@ -25,11 +25,17 @@
         "banned": "이 식은 금지되어 있습니다."
     },
     "school": {
-        "choice": "학교를 선택하세요.",
-        "tooManyResults": "%d개의 학교를 찾았으나 10개의 학교만 보냈습니다. 학교명을 더 자세히 기입해주세요."
+        "choice": "학교를 고르세요.",
+        "tooManyResults": "%d개의 학교를 찾았으나 10개의 학교만 보냈습니다. 학교명을 더 자세히 써주세요.",
+        "tooShortName": "이름이 너무 짧습니다!",
+        "sslError": "접속한 학교의 급식 서버에 접근하는 도중 SSL 에러가 발생했습니다.",
+        "noSuchDepartment": "행정 구역을 찾을 수 없습니다! 다음 행정 구역을 지원합니다: %s",
+        "noSuchSchool": "학교를 찾을 수 없습니다!",
+        "error": "에러!",
+        "departments": "서울, 부산, 대구, 인천, 광주, 대전, 울산, 세종, 경기, 강원, 충북, 충남, 전북, 전남, 경북, 경남, 제주"
     },
     "source": {
-        "viewOn": "%s 에서 보기",
+        "viewOn": "%s에서 보기",
         "similarity": "유사도",
         "noPhoto": "사진을 찾을 수 없습니다!"
     },
@@ -48,19 +54,19 @@
         },
         "vote": {
             "title": "vote [create 이름, [public|anonymous|counter], 선택지1, 선택지2...|view 고유번호|result 고유번호|aresult 고유번호|open 고유번호|close 고유번호|delete 고유번호]",
-            "value": "투표 명령입니다."
+            "value": "투표 명령어입니다."
         },
         "info": {
             "title": "info",
-            "value": "메시지의 정보를 가져옵니다."
+            "value": "메시지의 정보를 보여줍니다."
         },
         "school": {
             "title": "school [breakfast|lunch|dinner|snack] 도시 학교명",
-            "value": "학교 급식 메뉴를 가져옵니다."
+            "value": "학교 급식 메뉴를 알려줍니다."
         },
         "get": {
             "title": "get id",
-            "value": "입력한 고유 번호의 메시지를 가져옵니다."
+            "value": "입력한 고유 번호의 메시지를 알려줍니다."
         },
         "help": {
             "title": "help",
@@ -69,9 +75,57 @@
         "support": {
             "title": "지원 채팅방 (한국어)",
             "value": "@CocoaCafe"
+        },
+        "setting": {
+            "title": "setting 키 값",
+            "value": "개인 설정을 변경합니다."
+        },
+        "track": {
+            "title": "track [list|view 택배회사 운송장번호]",
+            "value": "택배 추적"
         }
     },
     "setting": {
-        "done": "설정이 기록되었습니다."
+        "done": "설정을 저장했습니다."
+    },
+    "info": {
+        "messageId": "메시지 고유 번호",
+        "date": "날짜",
+        "userId": "사용자 고유 번호",
+        "userIsBot": "봇 여부",
+        "userFirstName": "성",
+        "userLastName": "이름",
+        "userUsername": "사용자명",
+        "userLanguageCode": "언어 코드",
+        "chatId": "채팅방 고유 번호",
+        "chatTitle": "채팅방 이름",
+        "chatType": "채팅방 유형",
+        "debug": "디버그"
+    },
+    "track": {
+        "list": "다음 택배 회사들이 지원됩니다: %s",
+        "error101": "키가 잘못됐습니다! (관리자에게 문의하세요)",
+        "error102": "키가 만료됐습니다! (관리자에게 문의하세요)",
+        "error103": "키가 제한됐습니다! (관리자에게 문의하세요)",
+        "error104": "올바르지 않은 운송장 번호입니다!",
+        "error105": "이 운송장 번호는 20회 제한을 넘겨 오늘은 다시 조회할 수 없습니다! 내일 다시 명령어를 실행해보세요.",
+        "error106": "API 서버에서 운송장 번호를 검색하는 도중 오류가 발생했습니다.",
+        "error404": "찾을 수 없음: 코드 및 메시지를 확인하세요. (코드: \"%s\", 메시지: \"%s\")",
+        "error500": "API 서버에서 Internal Server Error가 발생했습니다.",
+        "latestTrackingInfo": "마지막 추적 정보",
+        "time": "시간",
+        "where": "위치",
+        "deliveryInfo": "배송 정보",
+        "itemName": "상품 이름",
+        "deliveryStatus": "상태",
+        "status1": "배송 준비 중",
+        "status2": "집화 완료",
+        "status3": "배송 중",
+        "status4": "지점 도착",
+        "status5": "배송 출발",
+        "status6": "배송 완료"
+    },
+    "search": {
+        "noResult": "결과가 없습니다!"
     }
 }

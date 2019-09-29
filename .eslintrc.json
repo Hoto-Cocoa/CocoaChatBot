@@ -19,7 +19,7 @@
       "brace-style": [1,"1tbs",{"allowSingleLine":true}],
       "comma-spacing": [1,{"after":true}],
       "no-spaced-func": 1,
-      "keyword-spacing": [1,{ "overrides": { "if": { "after": false }, "for": { "after": false }, "while": { "after": false }, "catch": { "after": false } } } ],
+      "keyword-spacing": [1,{ "overrides": { "if": { "after": false }, "for": { "after": false }, "while": { "after": false }, "catch": { "after": false }, "switch": { "after": false } } } ],
       "spaced-comment": [1,"always",{"exceptions":["-"," ="," *"," +"],"markers":["!"]}]
     }
   }

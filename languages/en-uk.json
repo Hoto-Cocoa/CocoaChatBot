@@ -1,0 +1,131 @@
+{
+    "rateLimit": "You've been rate-limited.",
+    "vote": {
+        "created": "Vote \"%s\"(#%d) has been created.",
+        "opened": "Vote %s(#%d) has been opened.",
+        "closed": "The vote %s(#%d) has been closed.",
+        "deleted": "The vote %s(#%d) has been deleted.",
+        "wasClosed": "This vote has been closed.",
+        "wasDeleted": "This vote has been deleted.",
+        "alreadyOpened": "This vote's already been opened.",
+        "alreadyClosed": "This vote's already been closed.",
+        "wrongType": "Wrong Type! (%s)",
+        "notThisChat": "This vote wasn't created in this chat. Please call ",
+        "notClosed": "This vote hasn't been closed.",
+        "recorded": "Your vote's been recorded."
+    },
+    "get": {
+        "result": "Here it is!",
+        "noResult": "Couldn't find %s message!",
+        "wrongNumber": "Wrong Number!"
+    },
+    "math": {
+        "wrongInput": "Wrong Input!",
+        "more": "More",
+        "banned": "This expression's been banned."
+    },
+    "school": {
+        "choice": "Choose your school.",
+        "tooManyResults": "%d schools's been found and only 10 schools are included. Please type your school name more specifically.",
+        "tooShortName": "The name is too short.",
+        "sslError": "SSL Error has occurred while connecting to Ministry of Education's Meal Server.",
+        "noSuchDepartment": "No such department! The following departments are available: %s",
+        "noSuchSchool": "No such school!",
+        "error": "Error!",
+        "departments": "Seoul, Busan, Daegu, Incheon, Gwangju, Daejeon, Ulsan, Sejong, Gyeonggi, Gangwon, Chungbuk, Chungnam, Jeonbuk, Jeonnam, Gyeongbuk, Gyeongnam, Jeju"
+    },
+    "source": {
+        "viewOn": "View on %s",
+        "similarity": "Similarity",
+        "noPhoto": "Couldn't find a picture."
+    },
+    "help": {
+        "search": {
+            "title": "//Search query",
+            "value": "Searches on the web."
+        },
+        "math": {
+            "title": "=Expression",
+            "value": "Calulates expression."
+        },
+        "source": {
+            "title": "source",
+            "value": "Finds the source of the picture."
+        },
+        "vote": {
+            "title": "vote [create name, [public|anonymous|counter], selection1, selection2...|view id|result id|aresult id|open id|close id|delete id]",
+            "value": "Manages a vote."
+        },
+        "info": {
+            "title": "info",
+            "value": "Gets information on the message."
+        },
+        "school": {
+            "title": "school [breakfast|lunch|dinner|snack] City SchoolName",
+            "value": "Gets the food menu of school."
+        },
+        "get": {
+            "title": "get id",
+            "value": "Finds a message with the ID."
+        },
+        "help": {
+            "title": "help.",
+            "value": "Display this message."
+        },
+        "support": {
+            "title": "Support Chat (ko-KR)",
+            "value": "@CocoaCafe"
+        },
+        "setting": {
+            "title": "setting key value\n",
+            "value": "Changes personal settings."
+        },
+        "track": {
+            "title": "track [list|view courier trackingNumbers]",
+            "value": "Tracks a package."
+        }
+    },
+    "setting": {
+        "done": "Your setting's been applied."
+    },
+    "info": {
+        "messageId": "Message ID",
+        "date": "Date",
+        "userId": "User ID",
+        "userIsBot": "Bot or not?",
+        "userFirstName": "First Name",
+        "userLastName": "Last Name",
+        "userUsername": "Username",
+        "userLanguageCode": "Language Code",
+        "chatId": "Chat ID",
+        "chatTitle": "Chat Title",
+        "chatType": "Chat Type",
+        "debug": "Debug"
+    },
+    "track": {
+        "list": "The following couriers are available: %s",
+        "error101": "No such key issued! (Please contact the administrator)",
+        "error102": "The key has been expired! (Please contact the administrator)",
+        "error103": "The key's limit's been exceeded! (Please contact the administrator)",
+        "error104": "Invaild tracking numbers!",
+        "error105": "This tracking number has exceeded the limit (20/day)! Please check the status tomorrow.",
+        "error106": "Error while looking up tracking number on the API server.",
+        "error404": "Not Found: Please check the code and message. (code: \"%s\", msg: \"%s\")",
+        "error500": "Internal server error on the API server.",
+        "latestTrackingInfo": "Latest Tracking Info",
+        "time": "Time",
+        "where": "Location",
+        "deliveryInfo": "Delivery Info",
+        "itemName": "Item Name",
+        "deliveryStatus": "Status",
+        "status1": "On the queue",
+        "status2": "Collected",
+        "status3": "On Delivery",
+        "status4": "Arrived at the Branch",
+        "status5": "Delivery Begun",
+        "status6": "Delivery Completed"
+    },
+    "search": {
+        "noResult": "Couldn't find any result!"
+    }
+}

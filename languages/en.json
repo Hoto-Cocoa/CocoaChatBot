@@ -26,7 +26,13 @@
 	},
 	"school": {
 		"choice": "Choice your school.",
-		"tooManyResults": "%d schools were searched and only 10 schools were sent. Please specify your school name more."
+		"tooManyResults": "%d schools were searched and only 10 schools were sent. Please specify your school name more.",
+		"tooShortName": "Too short name!",
+		"sslError": "SSL Error occurred while connecting to Ministry of Education Meal Server.",
+		"noSuchDepartment": "No such department! The following departments are available: %s",
+		"noSuchSchool": "No such school!",
+		"error": "Error!",
+		"departments": "Seoul, Busan, Daegu, Incheon, Gwangju, Daejeon, Ulsan, Sejong, Gyeonggi, Gangwon, Chungbuk, Chungnam, Jeonbuk, Jeonnam, Gyeongbuk, Gyeongnam, Jeju"
 	},
 	"source": {
 		"viewOn": "View on %s",
@@ -60,7 +66,7 @@
 		},
 		"get": {
 			"title": "get id",
-			"value": "Get Message of id"
+			"value": "Get Message of ID"
 		},
 		"help": {
 			"title": "help",
@@ -69,6 +75,14 @@
 		"support": {
 			"title": "Support Chat (ko-KR)",
 			"value": "@CocoaCafe"
+		},
+		"setting": {
+			"title": "setting key value",
+			"value": "Change Personal Setting"
+		},
+		"track": {
+			"title": "track [list|view courier waybillNumber]",
+			"value": "Track Delivery"
 		}
 	},
 	"setting": {
@@ -82,6 +96,41 @@
 		"userFirstName": "First Name",
 		"userLastName": "Last Name",
 		"userUsername": "Username",
-		"userLanguageCode": "Language Code"
+		"userLanguageCode": "Language Code",
+		"chatId": "Chat ID",
+		"chatTitle": "Chat Title",
+		"chatType": "Chat Type",
+		"debug": "Debug"
+	},
+	"track": {
+		"list": "The following couriers are available: %s",
+		"error101": "No such key issued! (Please contact to administrator)",
+		"error102": "Key was expried! (Please contact to administrator)",
+		"error103": "Key limit exceeded! (Please contact to administrator)",
+		"error104": "Invalid waybill number!",
+		"error105": "This waybill number exceeded limit(20 per day)! Please execute command at next day.",
+		"error106": "Error while lookup waybill number at API Server.",
+		"error404": "Not Found: Please check code and msg. (code: \"%s\", msg: \"%s\")",
+		"error500": "Internal Server Error at API Server.",
+		"latestTrackingInfo": "Latest Tracking Info",
+		"time": "Time",
+		"where": "Location",
+		"deliveryInfo": "Delivery Info",
+		"itemName": "Item Name",
+		"deliveryStatus": "Status",
+		"status1": "Waiting for Delivery",
+		"status2": "Collected",
+		"status3": "Delivering",
+		"status4": "Arrival at Branch",
+		"status5": "Started Delivery",
+		"status6": "Complete Delivery"
+	},
+	"search": {
+		"noResult": "Cannot find any result!"
+	},
+	"karaoke": {
+		"noProvider": "The provider you entered that not supported!",
+		"noResult": "Cannot find any result!",
+		"needOver60": "Need Over 60 Series"
 	}
 }

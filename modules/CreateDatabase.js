@@ -1,5 +1,15 @@
+/**
+ * @file CreateDatabase.js
+ * @author Hoto Cocoa <cocoa@hoto.us>
+ * @license AGPL-3.0
+ */
+
 const Sequelize = require('sequelize');
 
+/**
+ * @param {Object} config
+ * @param {Logger} logger
+ */
 module.exports = (config, logger) => {
 	const sequelize = new Sequelize(config.database, config.user, config.password, {
 		dialect: 'mysql',
@@ -9,7 +19,9 @@ module.exports = (config, logger) => {
 			acquire: 30000,
 			idle: 10000
 		},
-		logging: sequelizeLogger
+		logging: (msg) => {
+			logger.log('debug', 'Sequelize Executed "%s"', msg);
+		}
 	});
 	const queryInterface = sequelize.getQueryInterface();
 
@@ -121,8 +133,4 @@ module.exports = (config, logger) => {
 			defaultValue: true
 		}
 	});
-	
-	function sequelizeLogger(msg) {
-		logger.log('debug', 'Sequelize Executed "%s"', msg);
-	}
 }
