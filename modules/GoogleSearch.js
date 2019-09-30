@@ -17,14 +17,15 @@ module.exports = class GoogleSearch {
 	 */
 	async getResult(searchValue = '') {
 		return new Promise(async (resolve) => {
-			const $ = require('cheerio').load((await require('./AsyncRequest')(`https://www.google.com/search?hl=en&q=${encodeURI(searchValue)}&sa=N&num=${this.maxResultCount}&ie=UTF-8&oe=UTF-8&gws_rd=ssl`)).body);
+			const { body } = await require('./AsyncRequest')(`https://www.google.com/search?hl=en&q=${encodeURI(searchValue)}&sa=N&num=${this.maxResultCount}&ie=UTF-8&oe=UTF-8&gws_rd=ssl`, { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36' });
+			const $ = require('cheerio').load(body);
 			var result = [];
-			$('div.g').each((i, e) => {
-				$(e).find('h3.r a')[0] && result.push({
+			$('div.rc').each((i, e) => {
+				$(e).find('div.s').first().text() && result.push({
 					index: i,
-					title: $(e).find('h3.r a').first().text(),
-					href: decodeURI($(e).find('h3.r a')[0].attribs.href.replace(/(?:\/url\?q=)?(.*?)(?:&sa=.*)/, '$1')),
-					description: $(e).find('div.s').find('span.st').text()
+					title: $(e).find('h3.LC20lb').first().text(),
+					href: $(e).find('div.r a').first().attr('href'),
+					description: $(e).find('div.s').first().text()
 				});
 			}); 
 			resolve(result);
