@@ -12,6 +12,7 @@ const Sequelize = require('sequelize');
  */
 module.exports = (config, logger) => {
 	const sequelize = new Sequelize(config.database, config.user, config.password, {
+		host: config.host ? config.host : 'localhost',
 		dialect: 'mysql',
 		pool: {
 			max: 30,
