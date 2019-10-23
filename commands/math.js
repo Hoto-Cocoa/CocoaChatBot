@@ -12,7 +12,7 @@ module.exports = (telegram, logger, utils) => {
 				if(input.toLowerCase().search(require('../config').BannedWords[i]) !== -1) return telegram.bot.sendMessage(msg.chat.id, getLanguage('banned'), { reply_to_message_id: msg.message_id }); 
 			}
 			try {
-				if((input.match(/!/g) || []).length < 2 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1 && input !== 'pi') {
+				if(input.search('!') === -1 && input.search('pi') === -1 && (mathResult = +math.eval(input)) && mathResult !== Infinity && mathResult.toString().search('e') === -1) {
 					return telegram.bot.sendMessage(msg.chat.id, mathResult, { reply_to_message_id: msg.message_id });
 				} else {
 					throw new Error();
