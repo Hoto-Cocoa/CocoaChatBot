@@ -21,7 +21,7 @@ module.exports = class SchoolMeal {
 					return reject(err);
 				}
 				if(!res || !res.length) return reject('NO_SUCH_SCHOOL');
-				var result = [];
+				let result = [];
 				for(var i = 0; i < res.length; i++) if(res[i].name.search('유치원') === -1) result.push(res[i]);
 				return resolve(result);
 			});
@@ -37,13 +37,13 @@ module.exports = class SchoolMeal {
 			if(/^[ALOU-Z][0-9]{9}$/.test(code)) return reject(`NOT_SUPPORTED`);
 			if(code === 'J100000855') {
 				if(type === 'date') return reject('NO_DATA');
-				var result = (await require('./AsyncRequest')(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body;
+				let result = JSON.parse((await require('./AsyncRequest')(`https://dev-api.dimigo.in/dimibobs/${(new Date().toISOString()).substring(0, 10)}`)).body);
 				return (!result || !result[type]) ? reject('NO_DATA') : resolve(result[type]);
 			}
 			schoolApi.get(code, (err, res) => {
 				if(err) return reject(err);
 				if(!res || !res[(new Date().getDate())] || !res[(new Date().getDate())][type]) return reject('NO_DATA');
-				return resolve(res[(new Date().getDate())][type].join('/').replace('&amp;', '&'));
+				return resolve(res[(new Date().getDate())][type].join('/').replace(/&amp;/g, '&'));
 			});
 		});
 	}
