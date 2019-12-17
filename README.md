@@ -8,7 +8,7 @@ Cocoa Telegram Chat Bot.
 And more!
 
 ## Config
-```json
+```jsonc
 {
 	"Telegram": {
 		"Token": "Bot Token",
