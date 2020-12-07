@@ -20,6 +20,7 @@
     "calcium": "^0.5.3",
     "cheerio": "^1.0.0-rc.3",
     "iconv-lite": "^0.4.24",
+    "jsdom": "^16.2.0",
     "json-query": "^2.2.2",
     "mathjs": "^5.10.3",
     "mysql2": "^1.7.0",
