@@ -27,7 +27,7 @@
     "node-telegram-bot-api": "^0.30.0",
     "request": "^2.88.0",
     "sagiri": "^1.5.4",
-    "sequelize": "^4.44.3",
+    "sequelize": "^5.15.1",
     "winston": "^3.2.1"
   }
 }
